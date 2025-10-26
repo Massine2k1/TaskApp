@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html {% block html_language %} lang="en" {% endblock %}>
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block css %}{% endblock %}
+        <title>{% block title %}base{% endblock %}</title>
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    {% endblock %}
+
+    {% block javascript %}{% endblock %}
+</body>
+</html>

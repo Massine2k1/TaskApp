@@ -1,0 +1,17 @@
+{
+    "name": "massi/task-app",
+    "autoload": {
+        "psr-4": {
+            "Massi\\TaskApp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Massine",
+            "email": "massineabgar@hotmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "3.0"
+    }
+}
