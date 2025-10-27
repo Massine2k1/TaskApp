@@ -1,0 +1,13 @@
+{% extends "template.front.twig" %}
+
+{% block title %}{{ parent() }} | Homepage {% endblock %}
+
+{% block nav %}TaskFlow{% endblock %}
+{% block content %}
+<h1>Bienvenue sur la page d'accueil</h1>
+<p>Transformez vos idées en actions</p>
+<div>
+  <div><a>se connecter</a></div>
+  <div><a>s'inscrire</a></div>
+</div>
+{% endblock %}

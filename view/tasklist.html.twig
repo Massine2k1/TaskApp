@@ -1,0 +1,18 @@
+{% extends "template.back.twig" %}
+
+{% block title %}{{ parent() }} | Mes taches {% endblock %}
+{% block aside %}
+{% endblock %}
+{% block nav %}TaskFlow{% endblock %}
+{% block content %}
+<h1>Connexion/h1>
+<form method="post" action="">
+    <h2>Connexion</h2>
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+    <button type="submit" class="btn">Se connecter</button>
+    
+</form>
+{% endblock %}
