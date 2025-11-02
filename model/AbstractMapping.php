@@ -15,7 +15,7 @@ abstract class AbstractMapping
             
             $setterName = 'set'.str_replace("_","",ucwords($setter,'_'));
             if (method_exists($this,$setterName)) {
-                $this->$setterName§($value);
+                $this->$setterName($value);
             }
         }
     }

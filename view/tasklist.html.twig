@@ -1,15 +1,22 @@
 {% extends "template.back.twig" %}
 
 {% block title %}{{ parent() }} | Mes taches {% endblock %}
-{% block aside %}
-{% endblock %}
-{% block nav %}TaskFlow - connecté en tant que ...{% endblock %}
+
+{% block nav %}TaskFlow - connecté en tant que {{session.username}}{% endblock %}
 {% block content %}
-<h1>Liste des taches/h1>
-<div>
-   <ul>
-     <li>1er tache</li>
-     <li>2e taches</li>
-   </ul>
-</div>
+  {% set nbTasks = tasks|length %}
+    <h1>Liste des taches</h1>
+    {% if nbTasks > 0%}
+      <div>
+      {% for item in tasks %}
+        <div>
+          <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
+          <div>{{item.getTaskDesc}}</div>
+          <div>status: {{item.getStatusName}}</div>
+        </div>
+      {% endfor %}
+      </div> 
+
+    {% endif %}
+
 {% endblock %}

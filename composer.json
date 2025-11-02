@@ -2,7 +2,7 @@
     "name": "massi/task-app",
     "autoload": {
         "psr-4": {
-            "Massi\\TaskApp\\": "src/"
+            "model\\": "model/"
         }
     },
     "authors": [

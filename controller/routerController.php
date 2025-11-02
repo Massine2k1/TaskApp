@@ -16,7 +16,7 @@ try {
 
 
 
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['user_name'])) {
     require_once RACINE_PATH . "/../controller/privateController.php";
 }else{
     require_once RACINE_PATH . "/../controller/publicController.php";

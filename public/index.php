@@ -24,3 +24,5 @@ $twig->addExtension(new DebugExtension());
 
 // Chargement du router (chemin corrigé)
 require_once RACINE_PATH . '/../controller/routerController.php';
+
+var_dump($_SESSION);
