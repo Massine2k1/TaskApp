@@ -2,7 +2,6 @@
 
 {% block title %}{{ parent() }} | Mes taches {% endblock %}
 
-{% block nav %}TaskFlow - connecté en tant que {{session.username}}{% endblock %}
 {% block content %}
   {% set nbTasks = tasks|length %}
     <h1>Liste des taches</h1>

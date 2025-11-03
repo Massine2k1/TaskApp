@@ -2,6 +2,7 @@
 
 namespace model\manager;
 
+use model\AbstractMapping;
 use PDO;
 use Exception;
 use model\ManagerInterface;
@@ -37,6 +38,7 @@ class TaskManager implements ManagerInterface
             $stmt->execute([$userId]);
 
             $result = $stmt->fetchAll();
+            $stmt->closeCursor();
             $tasks = [];
 
             foreach ($result as $task) {
@@ -50,6 +52,28 @@ class TaskManager implements ManagerInterface
         }
         
         
+    }
+
+    public function addTask(TaskMapping $data): bool
+    {
+        $sql = 'INSERT INTO tasks(user_id, task_title, task_desc, task_due_date)
+                VALUES (?, ?, ?, ?)';
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $result = $stmt->execute([
+                $data->getUserId(),
+                $data->getTaskTitle(),
+                $data->getTaskDesc(),
+                $data->getTaskDueDate()
+            ]);
+            $stmt->closeCursor();
+            return $result;
+        } catch (Exception $e) {
+
+            error_log("Erreur addTask: " . $e->getMessage());
+            return false;
+        }
     }
 
 }

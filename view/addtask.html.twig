@@ -1,0 +1,51 @@
+{% extends "template.back.twig" %}
+
+{% block title %}{{ parent() }} | Ajouter une tâche {% endblock %}
+
+{% block content %}
+    <h1>Ajouter une nouvelle tâche</h1>
+    
+    {% if error is defined %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    <form method="post">
+        <!-- Champ caché pour user_id (automatique depuis la session) -->
+        <input type="hidden" name="user_id" value="{{ session.id }}">
+        
+        <div>
+            <label for="task_title">Titre de la tâche *</label><br>
+            <input type="text" 
+                   id="task_title" 
+                   name="task_title" 
+                   required 
+                   minlength="3" 
+                   maxlength="100"
+                   placeholder="Ex: Finir le projet TaskApp">
+        </div>
+        <br>
+        
+        <div>
+            <label for="task_desc">Description (optionnelle)</label><br>
+            <textarea id="task_desc" 
+                      name="task_desc" 
+                      rows="4" 
+                      cols="50"
+                      maxlength="500"
+                      placeholder="Décrivez votre tâche en détail..."></textarea>
+        </div>
+        <br>
+        <div>
+            <label for="task_due_date">Date d'échéance</label><br>
+            <input type="date" 
+                   id="task_due_date" 
+                   name="task_due_date">
+        </div>
+        <br>
+        
+        <div>
+            <button type="submit">Ajouter la tâche</button>
+            <a href="./">Retour à la liste</a>
+        </div>
+    </form>
+{% endblock %}
