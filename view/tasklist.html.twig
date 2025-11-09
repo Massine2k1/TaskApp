@@ -12,6 +12,7 @@
           <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
           <div>{{item.getTaskDesc}}</div>
           <div>status: {{item.getStatusName}}</div>
+          <div><a href="./?pg=update&id={{item.getId}}">Modifier</a> | <a href="./?pg=delete&id={{item.getId}}">Supprimer</a></div>
         </div>
       {% endfor %}
       </div> 

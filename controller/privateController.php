@@ -39,7 +39,32 @@ if (!isset($_GET['pg'])) {
             }
 
             echo $twig->render('addtask.html.twig',['session' => $_SESSION ?? []]);
+            break;
+        case 'update':
         
+            $task = $taskManager->getTaskById($_GET['id']);
+            $error = null;
+
+            if (isset($_POST)&&!empty($_POST)) {
+                $newTask = new TaskMapping($_POST);
+                $ok = $taskManager->updateTask($newTask);
+
+                if ($ok) {
+                    header('Location: ./');
+                    exit();
+                }else {
+                    $error = "Erreur lors de la mise à jour de la tâche";
+                }
+            }
+            echo $twig->render('updateTask.html.twig',['session' => $_SESSION ?? [], 'item'=> $task, 'error'=>$error]);
+            break;
+        case 'delete':
+            $taskManager->deleteTask($_GET['id']);
+            if ($taskManager) {
+                header('Location: ./');
+                exit();
+            }
+            break;
         default:
             break;
     }
