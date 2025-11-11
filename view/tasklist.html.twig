@@ -4,6 +4,7 @@
 
 {% block content %}
   {% set nbTasks = tasks|length %}
+    <div><a href="./">Toute les taches</a> | <a href="./?status_id=1">A faire</a> | <a href="./?status_id=2">En cours</a> | <a href="./?status_id=3">Terminées</a></div>
     <h1>Liste des taches</h1>
     {% if nbTasks > 0%}
       <div>
@@ -16,7 +17,8 @@
         </div>
       {% endfor %}
       </div> 
-
+    {% else %}
+      <div>Aucune tache pour le moment</div>
     {% endif %}
 
 {% endblock %}

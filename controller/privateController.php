@@ -7,13 +7,16 @@ use model\mapping\TaskMapping;
 $userManager = new UserManager($connectPDO);
 $taskManager = new TaskManager($connectPDO);
 
-if (!isset($_GET['pg'])) {
+if (empty($_GET)) {
 
     $tasks = $taskManager->getAllTasks();
+    
+    // Check if there's a numeric query parameter (e.g., ?1)
     echo $twig->render('tasklist.html.twig',
     ['tasks'=>$tasks,
-    'session' => $_SESSION ?? []]);
-}else {
+    'session' => $_SESSION ?? []]);    
+}elseif (isset($_GET['pg'])) {
+   
     switch ($_GET['pg']) {
         case 'deconnexion':
             
@@ -68,4 +71,11 @@ if (!isset($_GET['pg'])) {
         default:
             break;
     }
+}else {
+    $tasks = $taskManager->getAllTasksByStatus((int)$_GET['status_id']);
+    
+    // Check if there's a numeric query parameter (e.g., ?1)
+    echo $twig->render('tasklist.html.twig',
+    ['tasks'=>$tasks,
+    'session' => $_SESSION ?? []]);      
 }
