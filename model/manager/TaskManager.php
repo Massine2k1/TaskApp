@@ -176,5 +176,27 @@ class TaskManager implements ManagerInterface
         }
     }
 
+    public function getTaskCountsByStatus(): array
+    {
+        $userId = $_SESSION['id'];
+        $sql = "SELECT s.id,
+                       s.name,
+                       COUNT(t.id) as task_count
+                FROM task_statuses s
+                LEFT JOIN tasks t ON s.id = t.task_status_id
+                                  AND t.user_id = ?
+                GROUP BY s.id
+                ORDER BY s.id";
+    try {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("Erreur getTaskCountsByStatus: " . $e->getMessage());
+        return [];
+    }
+
+    }
+
 
 }

@@ -7,14 +7,15 @@ use model\mapping\TaskMapping;
 $userManager = new UserManager($connectPDO);
 $taskManager = new TaskManager($connectPDO);
 
+$statusCounts = $taskManager->getTaskCountsByStatus();
+$twig->addGlobal('statusCounts', $statusCounts);
+$twig->addGlobal('session', $_SESSION ?? []);
+
 if (empty($_GET)) {
 
     $tasks = $taskManager->getAllTasks();
     
-    // Check if there's a numeric query parameter (e.g., ?1)
-    echo $twig->render('tasklist.html.twig',
-    ['tasks'=>$tasks,
-    'session' => $_SESSION ?? []]);    
+    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks]);    
 }elseif (isset($_GET['pg'])) {
    
     switch ($_GET['pg']) {
@@ -41,7 +42,7 @@ if (empty($_GET)) {
                 }
             }
 
-            echo $twig->render('addtask.html.twig',['session' => $_SESSION ?? []]);
+            echo $twig->render('addtask.html.twig');
             break;
         case 'update':
         
@@ -59,7 +60,7 @@ if (empty($_GET)) {
                     $error = "Erreur lors de la mise à jour de la tâche";
                 }
             }
-            echo $twig->render('updateTask.html.twig',['session' => $_SESSION ?? [], 'item'=> $task, 'error'=>$error]);
+            echo $twig->render('updateTask.html.twig', ['item' => $task, 'error' => $error]);
             break;
         case 'delete':
             $taskManager->deleteTask($_GET['id']);
@@ -74,8 +75,5 @@ if (empty($_GET)) {
 }else {
     $tasks = $taskManager->getAllTasksByStatus((int)$_GET['status_id']);
     
-    // Check if there's a numeric query parameter (e.g., ?1)
-    echo $twig->render('tasklist.html.twig',
-    ['tasks'=>$tasks,
-    'session' => $_SESSION ?? []]);      
+    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks]);      
 }
