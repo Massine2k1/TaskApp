@@ -1,114 +1,111 @@
 {% extends "template.back.twig" %}
 
-{% block title %}{{ parent() }} | Mes taches {% endblock %}
+{% block title %}{{ parent() }} | Calendrier {% endblock %}
 
 {% block content %}
-  <table class="calendar">
-        <div><span id="left"><< </span><span id="calendar-month-year">Chargement ...</span><span id="right"> >></span></div>
+<div>
+  <div>
+    <button id="prev">&lt;</button>
+    <span id="monthYear">Chargement...</span>
+    <button id="next">&gt;</button>
+  </div>
 
-        <thead>
-            <tr>
-                <th>Lun</th>
-                <th>Mar</th>
-                <th>Mer</th>
-                <th>Jeu</th>
-                <th>Ven</th>
-                <th>Sam</th>
-                <th>Dim</th>
-            </tr>
-        </thead>
+  <table id="calendar" style="border-collapse:collapse; width:100%">
+    <thead>
+      <tr>
+        <th style="border:1px solid #ccc;">Lun</th>
+        <th style="border:1px solid #ccc;">Mar</th>
+        <th style="border:1px solid #ccc;">Mer</th>
+        <th style="border:1px solid #ccc;">Jeu</th>
+        <th style="border:1px solid #ccc;">Ven</th>
+        <th style="border:1px solid #ccc;">Sam</th>
+        <th style="border:1px solid #ccc;">Dim</th>
+      </tr>
+    </thead>
+    <tbody id="body">
+    </tbody>
+  </table>
+</div>
 
-        <tbody id="calendar-body">
-        </tbody>
-    </table>
-    <div>
-      <ul>
-    {% for item in tasks %}
-       <li>{{item.getTaskDueDate}}</li>
-    {% endfor %}
-      </ul>
-    </div>
+<style>
+  /* Minimal style: only green background for task cells */
+  .has-task { background:#90EE90 !important; }
+  td { padding:8px; border:1px solid #ddd; height:70px; vertical-align:top; }
+</style>
 
-    <div>
-      
-    </div>
 {% endblock %}
+
 {% block javascript %}
-  <script>
-     const tasks = {{tasksJson | raw}}
-     const body = document.getElementById('calendar-body')
-     function generateCalender(incr = 0) {
-        const today = new Date();
-        const targetDate = new Date(today.getFullYear(),today.getMonth() + incr);
-        const currentYear = targetDate.getFullYear();
-        const currentMonth = targetDate.getMonth();
-        const currentDay = today.getDate();
-        const test = document.getElementById('test');
-        
-        const monthNames = [
-          "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-          "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        ];
+<script>
+(() => {
+  // Minimal calendar that fetches tasks per month and marks cells with class 'has-task'
+  let month = new Date().getMonth() + 1; // 1-12
+  let year = new Date().getFullYear();
 
-        const dayNames = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+  const monthYearEl = document.getElementById('monthYear');
+  const body = document.getElementById('body');
 
-        document.getElementById('calendar-month-year').innerHTML = `${monthNames[currentMonth]} ${currentYear}`;
+  document.getElementById('prev').addEventListener('click', () => { changeMonth(-1); });
+  document.getElementById('next').addEventListener('click', () => { changeMonth(1); });
 
-        const dayInMonth = new Date(currentYear,currentMonth+1,0).getDate();
-        let firstDayWeek = new Date(currentYear, currentMonth, 1).getDay();
+  function changeMonth(delta) {
+    month += delta;
+    if (month < 1) { month = 12; year -= 1; }
+    if (month > 12) { month = 1; year += 1; }
+    load();
+  }
 
-        firstDayWeek = (firstDayWeek===0)? 6 : firstDayWeek - 1;
-        
-        let date = 1;
+  function formatDate(y,m,d){
+    return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
 
-        for (let i = 0; i < 6; i++) {
-          
-          const row = document.createElement('tr');
-          row.id = `row-${i}`;
-          body.appendChild(row);
+  async function load(){
+    monthYearEl.textContent = `${month}/${year}`;
+    body.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
 
-        for (let j = 0; j < 7; j++) {
-          if (i===0 && j < firstDayWeek) {
-            const cell = document.createElement('td');
-            row.appendChild(cell);
-          } else if(date<=dayInMonth) {
-            const cell = document.createElement('td');
-            cell.textContent = date;
-            
-            // Vérifier si cette date a une tâche
-            const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
-            if (tasks.some(task => task.task_due_date === dateStr)) {
-              cell.style.backgroundColor = "#90EE90";
-            }
-            
-            row.appendChild(cell);
-            date++;
+    try {
+      const res = await fetch(`?pg=api_calendar&month=${month}&year=${year}`);
+      if (!res.ok) throw new Error(res.statusText);
+      const json = await res.json();
+      const tasks = json.tasks || [];
+
+      // Build a set of dates that have tasks for quick lookup
+      const dates = new Set(tasks.map(t => t.task_due_date));
+
+      // Render calendar grid
+      const firstDay = new Date(year, month - 1, 1).getDay(); // 0=Sun
+      const start = firstDay === 0 ? 6 : firstDay - 1; // make Monday=0
+      const days = new Date(year, month, 0).getDate();
+
+      body.innerHTML = '';
+      let cur = 1;
+
+      for (let week=0; week<6; week++){
+        const tr = document.createElement('tr');
+        for (let d=0; d<7; d++){
+          const td = document.createElement('td');
+          if (week===0 && d<start){
+            td.textContent = '';
+          } else if (cur <= days){
+            td.textContent = cur;
+            const dateStr = formatDate(year, month, cur);
+            if (dates.has(dateStr)) td.classList.add('has-task');
+            cur++;
+          } else {
+            td.textContent = '';
           }
+          tr.appendChild(td);
         }
-      
+        body.appendChild(tr);
+        if (cur > days) break;
       }
-      
-     }
 
-    const arrowLeft = document.getElementById('left');
-    const arrowRight = document.getElementById('right');
-    let temp = 0;
+    } catch (e){
+      body.innerHTML = `<tr><td colspan="7">Erreur: ${e.message}</td></tr>`;
+    }
+  }
 
-    generateCalender();
-
-    arrowLeft.addEventListener('click', ()=>{
-        temp--
-        body.innerHTML = "";
-        generateCalender(temp);
-    });
-
-    arrowRight.addEventListener('click', ()=>{
-      temp++
-      body.innerHTML = "";
-      generateCalender(temp);
-    });
-
-    // let temp = 0;
-
-  </script>
+  load();
+})();
+</script>
 {% endblock %}

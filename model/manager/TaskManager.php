@@ -198,5 +198,48 @@ class TaskManager implements ManagerInterface
 
     }
 
+    /**
+     * Récupère les tâches d'un mois spécifique
+     * @param int $month Numéro du mois (1-12)
+     * @param int $year Année (ex: 2025)
+     * @return array Liste des tâches du mois
+     */
+    public function getTasksForMonth(int $month, int $year): array
+    {
+        $userId = $_SESSION['id'];
+
+        $startDate = sprintf('%04d-%02d-01', $year, $month);
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $endDate = sprintf('%04d-%02d-%02d', $year, $month, $daysInMonth);
+
+        $sql = "SELECT t.id,
+                       t.task_title,
+                       t.task_desc,
+                       t.task_due_date,
+                       t.task_created_at,
+                       s.name as status_name
+                FROM tasks t
+                INNER JOIN task_statuses s ON t.task_status_id = s.id
+                WHERE t.user_id = ?
+                  AND t.task_due_date BETWEEN ? AND ?
+                ORDER BY t.task_due_date ASC";
+
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId, $startDate, $endDate]);
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+
+            $tasks = [];
+            foreach ($result as $row) {
+                $tasks[] = new TaskMapping($row);
+            }
+
+            return $tasks;
+        } catch (Exception $e) {
+            error_log("Erreur getTasksForMonth: " . $e->getMessage());
+            return [];
+        }
+    }
 
 }

@@ -140,13 +140,15 @@ class TaskMapping extends AbstractMapping
 
     public function jsonSerialize(): array
     {
+        // Retourner les valeurs brutes sans appeler les getters
+        // pour éviter les exceptions lors de la sérialisation
         return [
-            'id' => $this->getId(),
-            'user_id' => $this->getUserId(),
-            'task_title' => $this->getTaskTitle(),
-            'task_desc' => $this->getTaskDesc(),
-            'task_status_id' => $this->getTaskStatusId(),
-            'task_due_date' => $this->getTaskDueDate(),
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'task_title' => $this->task_title,
+            'task_desc' => $this->task_desc,
+            'task_status_id' => $this->task_status_id,
+            'task_due_date' => $this->task_due_date,
         ];
     }
     /*

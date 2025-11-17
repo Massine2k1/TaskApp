@@ -71,9 +71,44 @@ if (empty($_GET)) {
             break;
         case 'calendrier':
             $tasks = $taskManager->getAllTasks();
-            $tasksJson = json_encode($tasks);
+            $tasksJson = json_encode($tasks,JSON_UNESCAPED_UNICODE);
             echo $twig->render('calendrier.html.twig',['tasks' => $tasks,'tasksJson'=>$tasksJson]);
             break;
+        case 'api_calendar':
+            // Endpoint JSON pour récupérer les tâches d'un mois (AJAX)
+            header('Content-Type: application/json; charset=utf-8');
+            $month = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
+            $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+            if ($month < 1 || $month > 12) $month = date('n');
+            if ($year < 2000 || $year > 2100) $year = date('Y');
+                $tasks = $taskManager->getTasksForMonth($month, $year);
+
+                // Convertir les objets TaskMapping en tableaux associatifs
+                $tasksArray = array_map(function($t){
+                    // Si l'objet expose jsonSerialize(), l'utiliser
+                    if (is_object($t) && method_exists($t, 'jsonSerialize')) {
+                        return $t->jsonSerialize();
+                    }
+
+                    // Sinon, tenter d'utiliser les getters connus
+                    return [
+                        'id' => method_exists($t, 'getId') ? $t->getId() : null,
+                        'user_id' => method_exists($t, 'getUserId') ? $t->getUserId() : null,
+                        'task_title' => method_exists($t, 'getTaskTitle') ? $t->getTaskTitle() : null,
+                        'task_desc' => method_exists($t, 'getTaskDesc') ? $t->getTaskDesc() : null,
+                        'task_status_id' => method_exists($t, 'getTaskStatusId') ? $t->getTaskStatusId() : null,
+                        'task_due_date' => method_exists($t, 'getTaskDueDate') ? $t->getTaskDueDate() : null,
+                    ];
+                }, $tasks ?: []);
+
+                // Répondre avec JSON (tableaux associatifs garantis)
+                echo json_encode([
+                    'success' => true,
+                    'month' => $month,
+                    'year' => $year,
+                    'tasks' => $tasksArray
+                ], JSON_UNESCAPED_UNICODE);
+            exit;
         default:
             break;
     }
