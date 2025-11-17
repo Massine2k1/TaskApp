@@ -69,6 +69,11 @@ if (empty($_GET)) {
                 exit();
             }
             break;
+        case 'calendrier':
+            $tasks = $taskManager->getAllTasks();
+            $tasksJson = json_encode($tasks);
+            echo $twig->render('calendrier.html.twig',['tasks' => $tasks,'tasksJson'=>$tasksJson]);
+            break;
         default:
             break;
     }

@@ -1,0 +1,114 @@
+{% extends "template.back.twig" %}
+
+{% block title %}{{ parent() }} | Mes taches {% endblock %}
+
+{% block content %}
+  <table class="calendar">
+        <div><span id="left"><< </span><span id="calendar-month-year">Chargement ...</span><span id="right"> >></span></div>
+
+        <thead>
+            <tr>
+                <th>Lun</th>
+                <th>Mar</th>
+                <th>Mer</th>
+                <th>Jeu</th>
+                <th>Ven</th>
+                <th>Sam</th>
+                <th>Dim</th>
+            </tr>
+        </thead>
+
+        <tbody id="calendar-body">
+        </tbody>
+    </table>
+    <div>
+      <ul>
+    {% for item in tasks %}
+       <li>{{item.getTaskDueDate}}</li>
+    {% endfor %}
+      </ul>
+    </div>
+
+    <div>
+      
+    </div>
+{% endblock %}
+{% block javascript %}
+  <script>
+     const tasks = {{tasksJson | raw}}
+     const body = document.getElementById('calendar-body')
+     function generateCalender(incr = 0) {
+        const today = new Date();
+        const targetDate = new Date(today.getFullYear(),today.getMonth() + incr);
+        const currentYear = targetDate.getFullYear();
+        const currentMonth = targetDate.getMonth();
+        const currentDay = today.getDate();
+        const test = document.getElementById('test');
+        
+        const monthNames = [
+          "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+          "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        ];
+
+        const dayNames = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+
+        document.getElementById('calendar-month-year').innerHTML = `${monthNames[currentMonth]} ${currentYear}`;
+
+        const dayInMonth = new Date(currentYear,currentMonth+1,0).getDate();
+        let firstDayWeek = new Date(currentYear, currentMonth, 1).getDay();
+
+        firstDayWeek = (firstDayWeek===0)? 6 : firstDayWeek - 1;
+        
+        let date = 1;
+
+        for (let i = 0; i < 6; i++) {
+          
+          const row = document.createElement('tr');
+          row.id = `row-${i}`;
+          body.appendChild(row);
+
+        for (let j = 0; j < 7; j++) {
+          if (i===0 && j < firstDayWeek) {
+            const cell = document.createElement('td');
+            row.appendChild(cell);
+          } else if(date<=dayInMonth) {
+            const cell = document.createElement('td');
+            cell.textContent = date;
+            
+            // Vérifier si cette date a une tâche
+            const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+            if (tasks.some(task => task.task_due_date === dateStr)) {
+              cell.style.backgroundColor = "#90EE90";
+            }
+            
+            row.appendChild(cell);
+            date++;
+          }
+        }
+      
+      }
+      
+     }
+
+    const arrowLeft = document.getElementById('left');
+    const arrowRight = document.getElementById('right');
+    let temp = 0;
+
+    generateCalender();
+
+    arrowLeft.addEventListener('click', ()=>{
+        temp--
+        body.innerHTML = "";
+        generateCalender(temp);
+    });
+
+    arrowRight.addEventListener('click', ()=>{
+      temp++
+      body.innerHTML = "";
+      generateCalender(temp);
+    });
+
+    // let temp = 0;
+
+  </script>
+{% endblock %}

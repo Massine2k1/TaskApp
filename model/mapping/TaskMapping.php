@@ -138,6 +138,17 @@ class TaskMapping extends AbstractMapping
         $this->task_created_at = $date;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'user_id' => $this->getUserId(),
+            'task_title' => $this->getTaskTitle(),
+            'task_desc' => $this->getTaskDesc(),
+            'task_status_id' => $this->getTaskStatusId(),
+            'task_due_date' => $this->getTaskDueDate(),
+        ];
+    }
     /*
     public function getUser(): ?UserMapping
     {
