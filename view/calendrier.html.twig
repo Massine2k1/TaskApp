@@ -28,9 +28,28 @@
 </div>
 
 <style>
+  td {     /* Enlève le padding du TD pour qu'il soit plat */
+      padding: 0; 
+      border: 1px solid #ddd; 
+      height: 70px; 
+      vertical-align: top; 
+      position: relative; /* Ajouté pour s'assurer que le contenu est bien positionné */
+  }
   /* Minimal style: only green background for task cells */
   .has-task { background:#90EE90 !important; }
-  td { padding:8px; border:1px solid #ddd; height:70px; vertical-align:top; }
+  .cell-link {
+        /* Rend le lien une boîte qui prend toute la place disponible */
+        display: block; 
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box; /* S'assure que le padding n'augmente pas la taille */
+        
+        /* Réapplique le padding que vous aviez sur le TD */
+        padding: 8px; 
+        
+        text-decoration: none; /* Enlève le soulignement du lien */
+        color: inherit; /* Utilise la couleur du texte de base du TD */
+    }
 </style>
 
 {% endblock %}
@@ -68,13 +87,14 @@
       if (!res.ok) throw new Error(res.statusText);
       const json = await res.json();
       const tasks = json.tasks || [];
-
+      console.log(tasks);
+      
       // Build a set of dates that have tasks for quick lookup
       const dates = new Set(tasks.map(t => t.task_due_date));
 
       // Render calendar grid
-      const firstDay = new Date(year, month - 1, 1).getDay(); // 0=Sun
-      const start = firstDay === 0 ? 6 : firstDay - 1; // make Monday=0
+      const firstDay = new Date(year, month - 1, 1).getDay(); 
+      const start = firstDay === 0 ? 6 : firstDay - 1;
       const days = new Date(year, month, 0).getDate();
 
       body.innerHTML = '';
@@ -89,7 +109,19 @@
           } else if (cur <= days){
             td.textContent = cur;
             const dateStr = formatDate(year, month, cur);
-            if (dates.has(dateStr)) td.classList.add('has-task');
+            tasks.forEach(e => {
+              if (e.task_due_date==dateStr){
+                url =`http://taskapp/public/?pg=update&id=${e.id}`;
+                const link = document.createElement('a');
+                link.setAttribute('href',url);
+                link.classList.add('cell-link');
+
+                link.innerHTML = td.innerHTML;
+                td.innerHTML = '';
+                td.appendChild(link);
+                td.classList.add('has-task');
+              }
+            });
             cur++;
           } else {
             td.textContent = '';

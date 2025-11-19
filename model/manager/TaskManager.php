@@ -242,4 +242,33 @@ class TaskManager implements ManagerInterface
         }
     }
 
+        public function getTaskByDate($date): bool | array
+    {
+        $sql = "SELECT t.id,
+                        t.task_title,
+                        t.task_desc,
+                        t.task_due_date,
+                        t.task_created_at,
+                        s.name as status_name
+                FROM tasks t 
+                INNER JOIN task_statuses s ON t.task_status_id = s.id
+                WHERE t.task_due_date = ? AND
+                WHERE s.name IN ('À faire','En cours','En retard')
+                ORDER BY t.task_created_at DESC";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$date]);
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            $tasks = [];
+            foreach ($result as $item) {
+                $tasks[]=new TaskMapping($item);
+            }
+            return $tasks;
+        } catch (Exception $e) {
+                $e->getMessage();
+                return false;
+        }
+    }
+
 }
