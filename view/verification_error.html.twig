@@ -1,0 +1,10 @@
+{% extends "template.front.twig" %}
+
+{% block title %}{{ parent() }} | Verification echoué {% endblock %}
+
+{% block nav %}TaskFlow{% endblock %}
+{% block content %}
+{% if error is defined %}
+    <div>{{error}}</div>
+{% endif %}
+{% endblock %}

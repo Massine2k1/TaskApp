@@ -1,0 +1,24 @@
+{% extends "template.front.twig" %}
+
+{% block title %}{{ parent() }} | Inscription{% endblock %}
+
+{% block nav %}TaskFlow{% endblock %}
+{% block content %}
+<h1>Inscription</h1>
+<form method="post" action="">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="user_name" required>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="user_pwd" required>
+        <label for="passwordClone">Confirmez votre mot de passe:</label>
+        <input type="password" id="passwordClone" name="user_pwd_clone" required>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="user_email" required>
+    <button type="submit" class="btn">S'inscrire</button>
+</form>
+<div class=""><a href="./">se connecter</a></div>
+{% if error is defined %}
+  <div>{{error}}</div>
+{% endif %}
+
+{% endblock %}

@@ -1,33 +1,8 @@
 {% extends "template.back.twig" %}
 
 {% block title %}{{ parent() }} | Calendrier {% endblock %}
-
-{% block content %}
-<div>
-  <div>
-    <button id="prev">&lt;</button>
-    <span id="monthYear">Chargement...</span>
-    <button id="next">&gt;</button>
-  </div>
-
-  <table id="calendar" style="border-collapse:collapse; width:100%">
-    <thead>
-      <tr>
-        <th style="border:1px solid #ccc;">Lun</th>
-        <th style="border:1px solid #ccc;">Mar</th>
-        <th style="border:1px solid #ccc;">Mer</th>
-        <th style="border:1px solid #ccc;">Jeu</th>
-        <th style="border:1px solid #ccc;">Ven</th>
-        <th style="border:1px solid #ccc;">Sam</th>
-        <th style="border:1px solid #ccc;">Dim</th>
-      </tr>
-    </thead>
-    <tbody id="body">
-    </tbody>
-  </table>
-</div>
-
-<style>
+{% block css %}
+  <style>
   td {     /* Enlève le padding du TD pour qu'il soit plat */
       padding: 0; 
       border: 1px solid #ddd; 
@@ -50,7 +25,51 @@
         text-decoration: none; /* Enlève le soulignement du lien */
         color: inherit; /* Utilise la couleur du texte de base du TD */
     }
-</style>
+
+    .currentDay{
+      border:2px solid blue;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+<div>
+  <div>
+    <button id="prev">&lt;</button>
+    <span id="monthYear">Chargement...</span>
+    <button id="next">&gt;</button>
+  </div>
+  <div style="display:flex;gap:2em;">
+    <table id="calendar" style="border-collapse:collapse; width:100%">
+      <thead>
+        <tr>
+          <th style="border:1px solid #ccc;">Lun</th>
+          <th style="border:1px solid #ccc;">Mar</th>
+          <th style="border:1px solid #ccc;">Mer</th>
+          <th style="border:1px solid #ccc;">Jeu</th>
+          <th style="border:1px solid #ccc;">Ven</th>
+          <th style="border:1px solid #ccc;">Sam</th>
+          <th style="border:1px solid #ccc;">Dim</th>
+        </tr>
+      </thead>
+      <tbody id="body">
+      </tbody>
+    </table>
+    <div>
+      {% if tasks is defined %}
+        {% if tasks is empty %}
+        <div>Aucune tache pour aujourd'hui</div>
+        {% else %}
+          {% for item in tasks %}
+            <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
+            <div>{{item.getTaskDesc}}</div>
+            <div>status: {{item.getStatusName}}</div>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
 
@@ -96,6 +115,9 @@
       const firstDay = new Date(year, month - 1, 1).getDay(); 
       const start = firstDay === 0 ? 6 : firstDay - 1;
       const days = new Date(year, month, 0).getDate();
+      const currentDay = new Date().getDate();
+      const today = new Date();
+      const isCurrentMonth = (year === today.getFullYear() && month === today.getMonth() + 1);
 
       body.innerHTML = '';
       let cur = 1;
@@ -109,9 +131,12 @@
           } else if (cur <= days){
             td.textContent = cur;
             const dateStr = formatDate(year, month, cur);
+            if (isCurrentMonth&&cur==currentDay) {
+                td.classList.add('currentDay');
+            }
             tasks.forEach(e => {
               if (e.task_due_date==dateStr){
-                url =`http://taskapp/public/?pg=update&id=${e.id}`;
+                url =`http://taskapp/public/?pg=task_date&&date=${e.task_due_date}`;
                 const link = document.createElement('a');
                 link.setAttribute('href',url);
                 link.classList.add('cell-link');

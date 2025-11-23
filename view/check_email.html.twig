@@ -1,0 +1,8 @@
+{% extends "template.front.twig" %}
+
+{% block title %}{{ parent() }} | Verification Réussis {% endblock %}
+
+{% block nav %}TaskFlow{% endblock %}
+{% block content %}
+<div>Un lien de confirmation a été envoyé à l'adresse {{email}}, Merci de cliquer dessus pour valider votre inscription</div>
+{% endblock %}

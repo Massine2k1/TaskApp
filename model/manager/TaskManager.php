@@ -51,7 +51,6 @@ class TaskManager implements ManagerInterface
             return false;
         }
         
-        
     }
 
     public function getAllTasksByStatus($id): bool | array
@@ -253,7 +252,7 @@ class TaskManager implements ManagerInterface
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
                 WHERE t.task_due_date = ? AND
-                WHERE s.name IN ('À faire','En cours','En retard')
+                s.name IN ('À faire','En cours','En retard')
                 ORDER BY t.task_created_at DESC";
         try {
             $stmt = $this->db->prepare($sql);
@@ -271,4 +270,56 @@ class TaskManager implements ManagerInterface
         }
     }
 
+    public function CountTaskByMonth($year)
+    {
+        $userId = $_SESSION["id"];
+        $sql = "SELECT
+                    YEAR(task_due_date) as annee,
+                    MONTH(task_due_date) as mois,
+                    DATE_FORMAT(task_due_date, '%M') as mois_nom,
+                    COUNT(*) as nombres_taches
+                FROM tasks
+                WHERE user_id = ?
+                  AND YEAR(task_due_date)=?
+                GROUP BY YEAR(task_due_date), MONTH(task_due_date)
+                ORDER BY mois DESC;";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId,$year]);
+            $result = $stmt->fetchAll();
+            $stmt->closeCursor();
+            return $result;
+        } catch (Exception $th) {
+            $th->getMessage();
+        }
+    }
+
+    public function getTodayTask()
+    {
+        $userId = $_SESSION["id"];
+        $currentDate = date("Y-m-d");
+        $sql = "SELECT t.id,
+                        t.task_title,
+                        t.task_desc,
+                        t.task_due_date,
+                        t.task_created_at,
+                        s.name as status_name
+                FROM tasks t 
+                INNER JOIN task_statuses s ON t.task_status_id = s.id
+                WHERE t.user_id = ? AND
+                t.task_due_date = ?
+                ORDER BY t.task_created_at DESC";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$userId,$currentDate]);
+            $result = $stmt->fetchAll();
+            $data = [];
+            foreach ($result as $item) {
+                $data[]=new TaskMapping($item);
+            }
+            return $data;
+        } catch (Exception $th) {
+            $th->getMessage();
+        }
+    }
 }

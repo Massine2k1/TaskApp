@@ -1,0 +1,85 @@
+{% extends "template.back.twig" %}
+
+{% block title %}{{ parent() }} | Mes taches{% endblock %}
+
+{% block content %}
+<div style="width:1000px;height:auto;">
+  <canvas id="myChart">
+  </canvas>
+</div>
+<div><span id="prev"><< </span><span id="year"></span><span id="next"> >></span></div>
+{% endblock %}
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const year = document.getElementById('year');
+let currentYear = new Date().getFullYear();
+
+async function loadDashboardData(yr) {
+  try{
+    const resp = await fetch(`?pg=api_dashboard&year=${yr}`);
+    if(!resp.ok){
+      throw new Error('Erreur lors de la récupération des données');
+    }
+    const data = await resp.json();
+    console.log(data);
+    year.textContent = yr;
+    updateChart(data);
+  }catch(error){
+  console.error('Erreur lors du chargement des données:', error);
+  }
+
+}
+
+function updateYear(yr){
+  currentYear += yr;
+  loadDashboardData(currentYear);
+}
+
+function updateChart(data){
+  const monthData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  data.forEach(item => {
+    const monthIndex = item.mois - 1;
+    monthData[monthIndex] = item.nombres_taches || 0;
+  });
+
+  MyChart.data.datasets[0].data = monthData;
+  MyChart.update();
+}
+
+
+  const ctx = document.getElementById('myChart');
+
+  const MyChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+      datasets: [{
+        label: 'Nombre de tâches par mois',
+        data: [],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max:20
+        }
+      }
+    }
+  });
+
+  loadDashboardData(currentYear);
+
+  document.getElementById('prev').addEventListener('click', () => { 
+    updateYear(-1);
+  });
+  document.getElementById('next').addEventListener('click', () => { 
+    updateYear(1);
+  });
+</script>
+{% endblock %}

@@ -40,6 +40,8 @@ if (empty($_GET)) {
                 }else {
                     $error = 'Veuillez remplir tous les champs';
                 }
+            }else {
+                $error = 'Veuillez remplir tous les champs';
             }
 
             echo $twig->render('addtask.html.twig');
@@ -70,9 +72,12 @@ if (empty($_GET)) {
             }
             break;
         case 'calendrier':
-            $tasks = $taskManager->getAllTasks();
-            $tasksJson = json_encode($tasks,JSON_UNESCAPED_UNICODE);
-            echo $twig->render('calendrier.html.twig',['tasks' => $tasks,'tasksJson'=>$tasksJson]);
+            $tasks = $taskManager->getTodayTask();
+            $error = null;
+            if (!is_array($tasks)) {
+                $error = $tasks;
+            }
+            echo $twig->render('calendrier.html.twig',['tasks' => $tasks,'error'=> $error]);
             break;
         case 'api_calendar':
             // Endpoint JSON pour récupérer les tâches d'un mois (AJAX)
@@ -108,10 +113,35 @@ if (empty($_GET)) {
                     'year' => $year,
                     'tasks' => $tasksArray
                 ], JSON_UNESCAPED_UNICODE);
-            exit;
+            exit();
+        case 'task_date':
+            $tasks = []; 
+
+            if (!empty($_GET['date'])){
+                $result = $taskManager->getTaskByDate($_GET['date']);
+                
+                if ($result !== false && is_array($result)) {
+                    $tasks = $result;
+                }
+            }
+            
+            echo $twig->render('tasksByDate.html.twig', ['tasks' => $tasks]);
+            break;
+        case 'api_dashboard':
+            header('Content-Type: application/json; charset=utf-8');
+            if (isset($_GET['year'])) {
+                $tasks = $taskManager->CountTaskByMonth($_GET['year']);
+            }
+            
+            echo json_encode($tasks,JSON_UNESCAPED_UNICODE);
+            exit();
+        case 'dashboard':
+
+            echo $twig->render('dashboard.html.twig');
+            break;
         default:
             break;
-    }
+        }
 }else {
     $tasks = $taskManager->getAllTasksByStatus((int)$_GET['status_id']);
     

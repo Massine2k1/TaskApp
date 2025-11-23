@@ -1,16 +1,9 @@
 {% extends "template.back.twig" %}
 
-{% block title %}{{ parent() }} | Mes taches{% endblock %}
+{% block title %}{{ parent() }} | Mes taches {% endblock %}
 
 {% block content %}
-    <div><a href="./">Toute les taches</a> 
-    {% if statusCounts is defined %}
-      {% for item in statusCounts %}  
-        | <a href="./?status_id={{ item.id }}">{{item.name}} ({{item.task_count}})</a>
-      {% endfor %}
-    {% endif %}
-    </div>
-    <h1>Liste des taches</h1>
+    <h1>Taches du {{ tasks[0].taskDueDate }}</h1>
     {% set nbTasks = tasks|length %}
       {% if nbTasks > 0%}
       <div>
@@ -25,6 +18,5 @@
       </div> 
     {% else %}
       <div>Aucune tache pour le moment</div>
-    {% endif %}
-
+    {% endif %}è
 {% endblock %}
