@@ -1,0 +1,181 @@
+/* ===================================
+   CALENDRIER - TASKFLOW
+   =================================== */
+
+/* Table du calendrier */
+.cosmic-calendar {
+    border-spacing: 6px;
+    width: 100%;
+}
+
+.cosmic-calendar thead th {
+    color: var(--comet);
+    padding: 1rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Jours du calendrier */
+.calendar-day {
+    background: rgba(26, 27, 45, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    height: 100px;
+    padding: 0.75rem 0.5rem;
+    margin: 4px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.calendar-day:hover {
+    background: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px);
+}
+
+.calendar-day.has-mission {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.15)) !important;
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.calendar-day.current-day {
+    background: linear-gradient(135deg, var(--quantum-blue), var(--pulsar-purple)) !important;
+    color: white !important;
+    font-weight: 700;
+    border-color: var(--quantum-blue);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.calendar-day.current-day .day-number {
+    color: white !important;
+}
+
+.calendar-day .day-number {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--stardust);
+    margin-bottom: 0.25rem;
+}
+
+.calendar-day .mission-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2px;
+}
+
+.calendar-day .mission-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--supernova);
+    animation: pulse 2s infinite;
+}
+
+.calendar-day.has-mission .day-content {
+    position: relative;
+    z-index: 2;
+}
+
+.calendar-day.empty {
+    background: rgba(255, 255, 255, 0.02) !important;
+    cursor: default;
+    border-color: transparent !important;
+}
+
+.calendar-day.empty:hover {
+    background: rgba(255, 255, 255, 0.02) !important;
+    transform: none;
+    border-color: transparent !important;
+}
+
+/* Mission Items */
+.mission-item {
+    background: rgba(26, 27, 45, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease;
+    animation: slideIn 0.4s ease-out;
+}
+
+.mission-item:hover {
+    background: rgba(37, 99, 235, 0.1) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .calendar-day {
+        height: 90px;
+        padding: 0.6rem 0.4rem;
+        margin: 3px;
+    }
+
+    .cosmic-calendar {
+        border-spacing: 4px;
+    }
+}
+
+@media (max-width: 992px) {
+    .calendar-day {
+        height: 80px;
+        padding: 0.5rem 0.3rem;
+        margin: 2px;
+    }
+    
+    .calendar-day .day-number {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendar-day {
+        height: 70px;
+        padding: 0.4rem 0.2rem;
+        border-radius: 8px;
+    }
+    
+    .calendar-day .day-number {
+        font-size: 0.85rem;
+    }
+    
+    .calendar-day .mission-dot {
+        width: 4px;
+        height: 4px;
+    }
+    
+    .cosmic-calendar thead th {
+        padding: 0.75rem 0.25rem !important;
+        font-size: 0.8rem;
+    }
+    
+    .btn-group .btn {
+        padding: 0.5rem 0.75rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .calendar-day {
+        height: 60px;
+        padding: 0.3rem 0.1rem;
+    }
+    
+    .calendar-day .day-number {
+        font-size: 0.8rem;
+    }
+    
+    .mission-item .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-body.p-3 {
+        padding: 1rem !important;
+    }
+}
