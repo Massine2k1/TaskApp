@@ -1,0 +1,11 @@
+/* ===================================
+   TASKFLOW - FICHIER CSS PRINCIPAL
+   =================================== */
+
+/* Import des fichiers CSS dans l'ordre de priorité */
+@import url('variables.css');
+@import url('base.css');
+@import url('animations.css');
+@import url('components.css');
+@import url('navigation.css');
+@import url('forms.css');

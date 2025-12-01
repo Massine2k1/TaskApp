@@ -1,0 +1,17 @@
+/* ===================================
+   VARIABLES CSS GLOBALES - TASKFLOW
+   =================================== */
+
+:root {
+    /* Palette Cosmique */
+    --deep-space: #0a0b14;
+    --cosmic-blue: #1a1b2d;
+    --nebula-purple: #2d1b69;
+    --stardust: #f8fafc;
+    --comet: #cbd5e1;
+    --galaxy-edge: #334155;
+    --quantum-blue: #2563eb;
+    --pulsar-purple: #7c3aed;
+    --supernova: #f59e0b;
+    --dark-matter: #000000;
+}

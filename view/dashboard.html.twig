@@ -1,85 +1,157 @@
 {% extends "template.back.twig" %}
-
-{% block title %}{{ parent() }} | Mes taches{% endblock %}
-
+{% block css %}
+{{ parent() }}
+<link href="./css/dashboard.css" rel="stylesheet">
+{% endblock %}
 {% block content %}
-<div style="width:1000px;height:auto;">
-  <canvas id="myChart">
-  </canvas>
+<div class="cosmic-card">
+    <div class="card-header bg-transparent border-bottom-0 pt-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <h2 class="montserrat h3 fw-bold mb-0 text-center text-md-start px-4">
+                <i class="bi bi-bar-chart me-2 text-quantum"></i>Tableau de Bord Cosmique
+            </h2>
+            <div class="btn-group">
+                <button id="prev" class="btn cosmic-btn-outline">
+                    <i class="bi bi-chevron-left text-white"></i>
+                </button>
+                <span id="year" class="btn cosmic-filter active px-3 fw-semibold">{{ "now"|date("Y") }}</span>
+                <button id="next" class="btn cosmic-btn-outline">
+                    <i class="bi bi-chevron-right text-white"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-body p-3 p-md-4">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="chart-container">
+                    <canvas id="cosmicChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-comet">Évolution de votre productivité spatiale</p>
+        </div>
+    </div>
 </div>
-<div><span id="prev"><< </span><span id="year"></span><span id="next"> >></span></div>
 {% endblock %}
 {% block javascript %}
+{{ parent() }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
-const year = document.getElementById('year');
+const yearElement = document.getElementById('year');
 let currentYear = new Date().getFullYear();
 
 async function loadDashboardData(yr) {
-  try{
-    const resp = await fetch(`?pg=api_dashboard&year=${yr}`);
-    if(!resp.ok){
-      throw new Error('Erreur lors de la récupération des données');
+    try {
+        const resp = await fetch(`?pg=api_dashboard&year=${yr}`);
+        if(!resp.ok){
+            throw new Error('Erreur lors de la récupération des données');
+        }
+        const data = await resp.json();
+        yearElement.textContent = yr;
+        updateChart(data);
+    } catch(error) {
+        console.error('Erreur lors du chargement des données:', error);
     }
-    const data = await resp.json();
-    console.log(data);
-    year.textContent = yr;
-    updateChart(data);
-  }catch(error){
-  console.error('Erreur lors du chargement des données:', error);
-  }
-
 }
 
 function updateYear(yr){
-  currentYear += yr;
-  loadDashboardData(currentYear);
+    currentYear += yr;
+    loadDashboardData(currentYear);
 }
 
 function updateChart(data){
-  const monthData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const monthData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-  data.forEach(item => {
-    const monthIndex = item.mois - 1;
-    monthData[monthIndex] = item.nombres_taches || 0;
-  });
+    data.forEach(item => {
+        const monthIndex = item.mois - 1;
+        monthData[monthIndex] = item.nombres_taches || 0;
+    });
 
-  MyChart.data.datasets[0].data = monthData;
-  MyChart.update();
+    cosmicChart.data.datasets[0].data = monthData;
+    cosmicChart.update();
 }
 
+const ctx = document.getElementById('cosmicChart').getContext('2d');
 
-  const ctx = document.getElementById('myChart');
-
-  const MyChart = new Chart(ctx, {
+const cosmicChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-      datasets: [{
-        label: 'Nombre de tâches par mois',
-        data: [],
-        borderWidth: 1
-      }]
+        labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+        datasets: [{
+            label: 'Missions accomplies',
+            data: [],
+            backgroundColor: 'rgba(37, 99, 235, 0.6)',
+            borderColor: 'rgba(37, 99, 235, 1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkipped: false,
+        }]
     },
     options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          max:20
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    color: '#e2e8f0',
+                    font: {
+                        family: 'Montserrat',
+                        size: 13
+                    }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(15, 15, 19, 0.9)',
+                titleFont: {
+                    family: 'Montserrat'
+                },
+                bodyFont: {
+                    family: 'Montserrat'
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 20,
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.1)'
+                },
+                ticks: {
+                    color: '#cbd5e1',
+                    font: {
+                        family: 'Montserrat'
+                    }
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#cbd5e1',
+                    font: {
+                        family: 'Montserrat',
+                        weight: '500'
+                    }
+                }
+            }
         }
-      }
     }
-  });
+});
 
-  loadDashboardData(currentYear);
+// Chargement initial
+loadDashboardData(currentYear);
 
-  document.getElementById('prev').addEventListener('click', () => { 
-    updateYear(-1);
-  });
-  document.getElementById('next').addEventListener('click', () => { 
-    updateYear(1);
-  });
+// Gestion des événements
+document.getElementById('prev').addEventListener('click', () => updateYear(-1));
+document.getElementById('next').addEventListener('click', () => updateYear(1));
 </script>
 {% endblock %}

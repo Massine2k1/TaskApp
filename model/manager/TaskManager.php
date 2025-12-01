@@ -27,6 +27,7 @@ class TaskManager implements ManagerInterface
                        t.task_desc,
                        t.task_due_date,
                        t.task_created_at,
+                       t.task_status_id,
                        s.name as status_name
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
@@ -61,6 +62,7 @@ class TaskManager implements ManagerInterface
                        t.task_desc,
                        t.task_due_date,
                        t.task_created_at,
+                       t.task_status_id,
                        s.name as status_name
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
@@ -116,6 +118,7 @@ class TaskManager implements ManagerInterface
                         t.task_desc,
                         t.task_due_date,
                         t.task_created_at,
+                        t.task_status_id,
                         s.name as status_name
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
@@ -159,6 +162,20 @@ class TaskManager implements ManagerInterface
 
     }
 
+    public function updateTaskStatus($taskId, $statusId): bool {
+    $sql = "UPDATE tasks SET task_status_id = ? WHERE id = ? AND user_id = ?";
+    
+    try {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$statusId, $taskId, $_SESSION['id']]);
+        $stmt->closeCursor();
+        return true;
+    } catch (Exception $e) {
+        error_log("Erreur updateTaskStatus: " . $e->getMessage());
+        return false;
+    }
+    }
+
     public function deleteTask($id): bool
 
     {
@@ -197,6 +214,22 @@ class TaskManager implements ManagerInterface
 
     }
 
+    public function getAllTaskStatuses(): bool | array
+    {
+        $sql = "SELECT * FROM task_statuses ORDER BY id";
+        
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            return $result;
+        } catch (Exception $e) {
+            error_log("Erreur getAllTaskStatuses: " . $e->getMessage());
+            return false;
+        }
+    }
+
     /**
      * Récupère les tâches d'un mois spécifique
      * @param int $month Numéro du mois (1-12)
@@ -216,6 +249,7 @@ class TaskManager implements ManagerInterface
                        t.task_desc,
                        t.task_due_date,
                        t.task_created_at,
+                       t.task_status_id,
                        s.name as status_name
                 FROM tasks t
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
@@ -248,6 +282,7 @@ class TaskManager implements ManagerInterface
                         t.task_desc,
                         t.task_due_date,
                         t.task_created_at,
+                        t.task_status_id,
                         s.name as status_name
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id
@@ -303,6 +338,7 @@ class TaskManager implements ManagerInterface
                         t.task_desc,
                         t.task_due_date,
                         t.task_created_at,
+                        t.task_status_id,
                         s.name as status_name
                 FROM tasks t 
                 INNER JOIN task_statuses s ON t.task_status_id = s.id

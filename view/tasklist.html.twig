@@ -1,30 +1,231 @@
 {% extends "template.back.twig" %}
 
-{% block title %}{{ parent() }} | Mes taches{% endblock %}
+{% block css %}
+{{ parent() }}
+<link href="./css/tasks.css" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-    <div><a href="./">Toute les taches</a> 
-    {% if statusCounts is defined %}
-      {% for item in statusCounts %}  
-        | <a href="./?status_id={{ item.id }}">{{item.name}} ({{item.task_count}})</a>
-      {% endfor %}
-    {% endif %}
+    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row gap-3 mb-5 mt-gm-0 mt-4">
+        <h2 class="montserrat h4 fw-bold mb-0 text-center text-md-start">
+            <i class="bi bi-list-task me-2 text-quantum"></i>Mes Tâches Spatiales
+        </h2>
+        <a href="./?pg=addtask" class="btn stellar-btn">
+            <i class="bi bi-plus-circle me-2"></i>Nouvelle Tâche
+        </a>
     </div>
-    <h1>Liste des taches</h1>
-    {% set nbTasks = tasks|length %}
-      {% if nbTasks > 0%}
-      <div>
-      {% for item in tasks %}
-        <div>
-          <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
-          <div>{{item.getTaskDesc}}</div>
-          <div>status: {{item.getStatusName}}</div>
-          <div><a href="./?pg=update&id={{item.getId}}">Modifier</a> | <a href="./?pg=delete&id={{item.getId}}">Supprimer</a></div>
+
+    <!-- Filtres par statut -->
+    <div class="cosmic-card mb-4">
+        <div class="card-body p-3 p-md-4">
+            <div class="d-flex flex-md-row flex-column align-items-center gap-2">
+                <span class="fw-semibold text-comet me-2 mb-2 mb-md-0">Filtrer :</span>
+                
+                <!-- Version Desktop -->
+                <div class="d-none d-md-flex flex-wrap gap-2 justify-content-center">
+                    <a href="./" class="btn btn-sm cosmic-filter {{ status_id is not defined ? 'active' }}">
+                        Toutes les tâches
+                    </a>
+                    {% if statusCounts is defined %}
+                        {% for item in statusCounts %}  
+                            <a href="./?status_id={{ item.id }}" class="btn btn-sm cosmic-filter {{ status_id == item.id ? 'active' }}">
+                                {{ item.name }} <span class="badge cosmic-badge ms-1">{{ item.task_count }}</span>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                
+                <!-- Version Mobile -->
+                <div class="d-md-none w-100">
+                    <button class="btn cosmic-filter w-100 d-flex justify-content-between align-items-center" 
+                            type="button" 
+                            id="filterDropdown" 
+                            onclick="toggleFilterDropdown()">
+                        <span id="currentFilter">
+                            {% if status_id is defined %}
+                                {% for item in statusCounts %}
+                                    {% if status_id == item.id %}{{ item.name }}{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Toutes les tâches
+                            {% endif %}
+                        </span>
+                        <i class="bi bi-chevron-down" id="dropdownIcon"></i>
+                    </button>
+                    
+                    <div class="filter-dropdown mt-2" id="filterDropdownMenu">
+                        <a href="./" class="dropdown-item cosmic-filter-item {{ status_id is not defined ? 'active' }}">
+                            Toutes les tâches
+                        </a>
+                        {% if statusCounts is defined %}
+                            {% for item in statusCounts %}  
+                                <a href="./?status_id={{ item.id }}" class="dropdown-item cosmic-filter-item {{ status_id == item.id ? 'active' }}">
+                                    {{ item.name }} <span class="badge cosmic-badge ms-1">{{ item.task_count }}</span>
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-      {% endfor %}
-      </div> 
+    </div>
+
+    <!-- Liste des tâches -->
+    {% set nbTasks = tasks|length %}
+    {% if nbTasks > 0 %}
+        <div class="row g-3 g-md-4">
+            {% for item in tasks %}
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="cosmic-card h-100 task-card">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="montserrat fw-bold text-stardust mb-0 text-truncate pe-2">{{ item.getTaskTitle }}</h5>
+                                <div class="select-with-icon">
+                                    <select class="form-select form-select-sm cosmic-select" data-task-id="{{ item.getId() }}">
+                                    {% for status in statusTask %}
+                                        {% if status.id != 4 %}
+                                        <option value="{{ status.id }}" 
+                                                {{ item.getTaskStatusId() == status.id ? 'selected' : '' }}>
+                                            {{ status.name }}
+                                        </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </select>
+                                    <i class="bi bi-chevron-down"></i>
+                                </div>
+                        </div>
+                        
+                        <p class="text-comet small mb-3 task-desc">{{ item.getTaskDesc|default('Aucune description') }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <small class="text-comet">
+                                <i class="bi bi-calendar3 me-1"></i>{{ item.getTaskDueDate }}
+                            </small>
+                        </div>
+                        
+                        <div class="btn-group w-100">
+                            <a href="./?pg=update&id={{ item.getId }}" class="btn btn-sm cosmic-btn-outline">
+                                <i class="bi bi-pencil me-1"></i>Modifier
+                            </a>
+                            <a href="./?pg=delete&id={{ item.getId }}" class="btn btn-sm cosmic-btn-danger">
+                                <i class="bi bi-trash me-1"></i>Supprimer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     {% else %}
-      <div>Aucune tache pour le moment</div>
+        <div class="cosmic-card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-inbox display-4 text-comet mb-3 opacity-50"></i>
+                <h4 class="montserrat h5 text-comet mb-3">Aucune tâche cosmique</h4>
+                <p class="text-comet mb-4">L'espace est vide... pour l'instant</p>
+                <a href="./?pg=addtask" class="btn stellar-btn">
+                    <i class="bi bi-plus-circle me-2"></i>Créer votre première tâche
+                </a>
+            </div>
+        </div>
     {% endif %}
 
+{% endblock %}
+{% block javascript %}
+    {{parent()}}
+    <script>
+    function toggleFilterDropdown() {
+        const dropdown = document.getElementById('filterDropdownMenu');
+        const icon = document.getElementById('dropdownIcon');
+        
+        if (dropdown.style.display === 'none') {
+            dropdown.style.display = 'block';
+            icon.classList.add('rotated');
+        } else {
+            dropdown.style.display = 'none';
+            icon.classList.remove('rotated');
+        }
+    }
+
+    // Fermer le dropdown si on clique ailleurs
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('filterDropdownMenu');
+        const button = document.getElementById('filterDropdown');
+        
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = 'none';
+            document.getElementById('dropdownIcon').classList.remove('rotated');
+        }
+    });
+
+    async function updateTaskStatus(statusId, taskId, element) {
+        const oldStatusId = element.dataset.oldStatus || element.value; // Stocker l'ancien statut
+        element.dataset.oldStatus = statusId; // Mettre à jour pour la prochaine fois
+        
+        element.style.opacity = '0.5';
+        try {
+            const resp = await fetch('?pg=api_update_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task_id: taskId, status_id: statusId })
+            });
+            const result = await resp.json();
+            
+            if (result.success) {
+                element.style.opacity = '1';
+                
+                // NOUVEAU : Gestion du dynamisme
+                const currentFilter = new URLSearchParams(window.location.search).get('status_id');
+                
+                // Si on a un filtre actif ET que la tâche ne correspond plus
+                if (currentFilter && currentFilter !== statusId) {
+                    // Masquer la tâche avec animation
+                    const taskCard = element.closest('.col-12');
+                    taskCard.style.transition = 'opacity 0.3s';
+                    taskCard.style.opacity = '0';
+                    setTimeout(() => taskCard.style.display = 'none', 300);
+                }
+                
+                // Mettre à jour les compteurs
+                updateCounters(oldStatusId, statusId);
+            }
+        } catch (error) {
+            element.style.opacity = '1';
+        }
+    }
+
+    function updateCounters(oldStatusId, newStatusId) {
+        // Desktop
+        const oldBadge = document.querySelector(`a[href*="status_id=${oldStatusId}"] .cosmic-badge`);
+        const newBadge = document.querySelector(`a[href*="status_id=${newStatusId}"] .cosmic-badge`);
+        
+        if (oldBadge) oldBadge.textContent = parseInt(oldBadge.textContent) - 1;
+        if (newBadge) newBadge.textContent = parseInt(newBadge.textContent) + 1;
+        
+        // Mobile (même logique)
+        document.querySelectorAll('.filter-dropdown .cosmic-badge').forEach(badge => {
+            const link = badge.closest('a');
+            if (link.href.includes(`status_id=${oldStatusId}`)) {
+                badge.textContent = parseInt(badge.textContent) - 1;
+            }
+            if (link.href.includes(`status_id=${newStatusId}`)) {
+                badge.textContent = parseInt(badge.textContent) + 1;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        document.querySelectorAll('.cosmic-select').forEach(element => {
+            element.addEventListener('change', function() {
+                const taskId = element.dataset.taskId;
+                const statusId = element.value;
+
+                updateTaskStatus(statusId,taskId,element); 
+            });
+        });
+
+
+    })
+
+    </script>
 {% endblock %}

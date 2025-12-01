@@ -1,22 +1,68 @@
 {% extends "template.back.twig" %}
 
-{% block title %}{{ parent() }} | Mes taches {% endblock %}
-
 {% block content %}
-    <h1>Taches du {{ tasks[0].taskDueDate }}</h1>
-    {% set nbTasks = tasks|length %}
-      {% if nbTasks > 0%}
-      <div>
-      {% for item in tasks %}
-        <div>
-          <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
-          <div>{{item.getTaskDesc}}</div>
-          <div>status: {{item.getStatusName}}</div>
-          <div><a href="./?pg=update&id={{item.getId}}">Modifier</a> | <a href="./?pg=delete&id={{item.getId}}">Supprimer</a></div>
+<div class="d-flex justify-content-between align-items-center flex-column flex-md-row gap-3 mb-4">
+    <h2 class="montserrat h4 fw-bold mb-0 text-center text-md-start">
+        <i class="bi bi-calendar-date me-2" style="color: var(--quantum-blue);"></i>
+        {% if tasks|length > 0 %}
+            Missions du {{ tasks[0].taskDueDate }}
+        {% else %}
+            Missions Spatiales
+        {% endif %}
+    </h2>
+    <div class="d-flex gap-2">
+        <a href="./?pg=calendrier" class="btn cosmic-btn-outline">
+            <i class="bi bi-arrow-left me-2"></i>Retour au calendrier
+        </a>
+        <a href="./?pg=addtask" class="btn stellar-btn">
+            <i class="bi bi-plus-circle me-2"></i>Nouvelle Mission
+        </a>
+    </div>
+</div>
+
+{% set nbTasks = tasks|length %}
+{% if nbTasks > 0 %}
+<div class="row g-3 g-md-4">
+    {% for item in tasks %}
+    <div class="col-12 col-md-6 col-xl-4">
+        <div class="cosmic-card h-100 task-card">
+            <div class="card-body p-3 p-md-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="montserrat fw-bold text-stardust mb-0 text-truncate pe-2">{{ item.getTaskTitle }}</h5>
+                    <span class="badge cosmic-status">{{ item.getStatusName }}</span>
+                </div>
+                
+                <p class="text-comet small mb-3 task-desc">{{ item.getTaskDesc|default('Aucune description') }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <small class="text-comet">
+                        <i class="bi bi-calendar3 me-1"></i>{{ item.getTaskDueDate }}
+                    </small>
+                </div>
+                
+                <div class="btn-group w-100">
+                    <a href="./?pg=update&id={{ item.getId }}" class="btn btn-sm cosmic-btn-outline">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                    </a>
+                    <a href="./?pg=delete&id={{ item.getId }}" class="btn btn-sm cosmic-btn-danger">
+                        <i class="bi bi-trash me-1"></i>Supprimer
+                    </a>
+                </div>
+            </div>
         </div>
-      {% endfor %}
-      </div> 
-    {% else %}
-      <div>Aucune tache pour le moment</div>
-    {% endif %}è
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="cosmic-card text-center py-5">
+    <div class="card-body">
+        <i class="bi bi-calendar-x display-4 text-comet mb-3 opacity-50"></i>
+        <h4 class="montserrat h5 text-comet mb-3">Aucune mission spatiale</h4>
+        <p class="text-comet mb-4">Cette journée est libre de toute mission planifiée</p>
+        <a href="./?pg=addtask" class="btn stellar-btn">
+            <i class="bi bi-plus-circle me-2"></i>Planifier une mission
+        </a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

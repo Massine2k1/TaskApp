@@ -15,7 +15,8 @@ if (empty($_GET['pg'])) {
 
     switch ($page) {
         case 'connexion':
-
+            
+            $error=null;
             if(isset($_SESSION['user_name'])){
 
                 header("Location:./");
@@ -35,26 +36,29 @@ if (empty($_GET['pg'])) {
                 } catch (Exception $e) {
                     $error = $e->getMessage();
                 }
-            }else{}
+            }
 
-            echo $twig->render('connexion.html.twig');
+            echo $twig->render('connexion.html.twig',['error'=>$error]);
             break;
         case 'inscription':
-            $error='';
-            if (isset( $_POST['user_name'],$_POST['user_pwd'],$_POST['user_email'])&&$_POST['user_pwd']===$_POST['user_pwd_clone']) {
-                try {
-                    $register = $userManager->register($_POST);
-                    if ($register) {
-                      header('Location: ./?pg=inscription_success&email=' . urlencode($_POST['user_email']));
-                      exit();
-                    } else {
-                        $error = "echec de l'inscription";
+            $error = null;
+
+            if (isset($_POST['user_name'], $_POST['user_pwd'], $_POST['user_email'])) {
+                if ($_POST['user_pwd'] === $_POST['user_pwd_clone']) {
+                    try {
+                        $register = $userManager->register($_POST);
+                        if ($register) {
+                            header('Location: ./?pg=inscription_success&email=' . urlencode($_POST['user_email']));
+                            exit();
+                        } else {
+                            $error = "Échec de l'inscription";
+                        }
+                    } catch (Exception $th) {
+                        $error = $th->getMessage();
                     }
-                } catch (Exception $th) {
-                    $error = $th->getMessage();
+                } else {
+                    $error = "Les mots de passe ne correspondent pas";
                 }
-            }else {
-                $error = "Champs incorrects";
             }
 
             echo $twig->render('register.html.twig', ['error' => $error]);

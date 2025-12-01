@@ -1,0 +1,191 @@
+/* ===================================
+   COMPOSANTS RÉUTILISABLES - TASKFLOW
+   =================================== */
+
+/* Cartes cosmiques */
+.cosmic-card {
+    background: rgba(26, 27, 45, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.cosmic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.cosmic-card:hover::before {
+    left: 100%;
+}
+
+.cosmic-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(37, 99, 235, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(37, 99, 235, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Boutons */
+.stellar-btn {
+    background: linear-gradient(135deg, var(--quantum-blue) 0%, var(--pulsar-purple) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.stellar-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.stellar-btn:hover::before {
+    left: 100%;
+}
+
+.stellar-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 10px 25px rgba(37, 99, 235, 0.3),
+        0 5px 10px rgba(124, 58, 237, 0.2);
+}
+
+.cosmic-btn-outline {
+    background: transparent;
+    border: 1px solid var(--quantum-blue);
+    color: var(--quantum-blue);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cosmic-btn-outline:hover {
+    background: var(--quantum-blue);
+    color: white;
+}
+
+.cosmic-btn-danger {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cosmic-btn-danger:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.cosmic-btn-icon {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--comet);
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.cosmic-btn-icon:hover {
+    background: var(--quantum-blue);
+    color: white;
+    border-color: var(--quantum-blue);
+}
+
+/* Filtres et badges */
+.cosmic-filter {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--comet);
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.cosmic-filter:hover,
+.cosmic-filter.active {
+    background: var(--quantum-blue);
+    color: white;
+    border-color: var(--quantum-blue);
+}
+
+.cosmic-status {
+    background: rgba(37, 99, 235, 0.2);
+    color: var(--quantum-blue);
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.cosmic-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--comet);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Carousel cosmique */
+.cosmic-carousel .carousel-control-prev,
+.cosmic-carousel .carousel-control-next {
+    width: 60px;
+    height: 60px;
+    background: rgba(26, 27, 45, 0.8);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.cosmic-carousel .carousel-control-prev:hover,
+.cosmic-carousel .carousel-control-next:hover {
+    opacity: 1;
+    background: rgba(37, 99, 235, 0.3);
+    border-color: var(--quantum-blue);
+}
+
+.cosmic-carousel .carousel-indicators button {
+    background-color: var(--comet);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 6px;
+    transition: all 0.3s ease;
+}
+
+.cosmic-carousel .carousel-indicators .active {
+    background-color: var(--quantum-blue);
+    transform: scale(1.2);
+}

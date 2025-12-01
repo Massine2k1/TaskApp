@@ -1,168 +1,265 @@
 {% extends "template.back.twig" %}
-
-{% block title %}{{ parent() }} | Calendrier {% endblock %}
 {% block css %}
-  <style>
-  td {     /* Enlève le padding du TD pour qu'il soit plat */
-      padding: 0; 
-      border: 1px solid #ddd; 
-      height: 70px; 
-      vertical-align: top; 
-      position: relative; /* Ajouté pour s'assurer que le contenu est bien positionné */
+{{ parent() }}
+<link href="./css/calendar.css" rel="stylesheet">
+<style>
+  /* Styles spécifiques au calendrier */
+  .cosmic-calendar {
+      background: transparent;
+      border-collapse: separate;
   }
-  /* Minimal style: only green background for task cells */
-  .has-task { background:#90EE90 !important; }
-  .cell-link {
-        /* Rend le lien une boîte qui prend toute la place disponible */
-        display: block; 
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box; /* S'assure que le padding n'augmente pas la taille */
-        
-        /* Réapplique le padding que vous aviez sur le TD */
-        padding: 8px; 
-        
-        text-decoration: none; /* Enlève le soulignement du lien */
-        color: inherit; /* Utilise la couleur du texte de base du TD */
-    }
 
-    .currentDay{
-      border:2px solid blue;
-    }
-  </style>
+  .cosmic-calendar thead th {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background: rgba(26, 27, 45, 0.5);
+  }
+
+  .calendar-day {
+      background: rgba(9, 11, 41, 0.3) !important;
+  }
+</style>
 {% endblock %}
 {% block content %}
-<div>
-  <div>
-    <button id="prev">&lt;</button>
-    <span id="monthYear">Chargement...</span>
-    <button id="next">&gt;</button>
-  </div>
-  <div style="display:flex;gap:2em;">
-    <table id="calendar" style="border-collapse:collapse; width:100%">
-      <thead>
-        <tr>
-          <th style="border:1px solid #ccc;">Lun</th>
-          <th style="border:1px solid #ccc;">Mar</th>
-          <th style="border:1px solid #ccc;">Mer</th>
-          <th style="border:1px solid #ccc;">Jeu</th>
-          <th style="border:1px solid #ccc;">Ven</th>
-          <th style="border:1px solid #ccc;">Sam</th>
-          <th style="border:1px solid #ccc;">Dim</th>
-        </tr>
-      </thead>
-      <tbody id="body">
-      </tbody>
-    </table>
-    <div>
-      {% if tasks is defined %}
-        {% if tasks is empty %}
-        <div>Aucune tache pour aujourd'hui</div>
-        {% else %}
-          {% for item in tasks %}
-            <h2>{{item.getTaskTitle}} <span>- à faire le {{item.getTaskDueDate}}</span></h2>
-            <div>{{item.getTaskDesc}}</div>
-            <div>status: {{item.getStatusName}}</div>
-          {% endfor %}
-        {% endif %}
-      {% endif %}
+<div class="cosmic-card mt-4">
+    <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+        <div class="d-flex flex-column gap-4 gap-sm-0 flex-md-row justify-content-between align-items-center px-5 mb-4">
+            <h2 class="montserrat h3 fw-bold mb-0 text-center text-md-start">
+                <i class="bi bi-calendar-week me-2" style="color: var(--quantum-blue);"></i>Calendrier Spatial
+            </h2>
+            <div class="btn-group">
+                <button id="prev" class="btn cosmic-btn-outline py-2 px-3">
+                    <i class="bi bi-chevron-left text-white montserrat "></i>
+                </button>
+                <span id="monthYear" class="btn cosmic-filter active px-4 fw-semibold montserrat">Chargement...</span>
+                <button id="next" class="btn cosmic-btn-outline py-2 px-3">
+                    <i class="bi bi-chevron-right text-white montserrat "></i>
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <div class="card-body p-3 p-md-4">
+        <div class="row g-4">
+            <!-- Calendrier Principal -->
+            <div class="col-12 col-lg-8">
+                <div class="cosmic-card h-100">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-center mb-0 cosmic-calendar">
+                                <thead>
+                                    <tr class="border-bottom border-secondary">
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Lun</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Mar</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Mer</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Jeu</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Ven</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Sam</th>
+                                        <th class="text-comet p-3 small fw-semibold montserrat">Dim</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendarBody" class="bg-transparent">
+                                    <tr>
+                                        <td colspan="7" class="p-5 text-comet">
+                                            <div class="d-flex justify-content-center align-items-center py-4">
+                                                <div class="spinner-border text-quantum me-3" role="status"></div>
+                                                <span>Chargement du calendrier spatial...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel des Tâches -->
+            <div class="col-12 col-lg-4">
+                <div class="cosmic-card h-100">
+                    <div class="card-header bg-transparent border-bottom border-secondary p-3">
+                        <h5 class="montserrat fw-bold text-stardust mb-0">
+                            <i class="bi bi-list-check me-2" style="color: var(--quantum-blue);"></i>Missions du Jour
+                        </h5>
+                    </div>
+                    <div class="card-body p-3">
+                        {% if tasks is defined %}
+                            {% if tasks is empty %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-check2-circle display-5 text-comet opacity-50 mb-3"></i>
+                                <p class="text-comet mb-0 small">Aucune mission aujourd'hui</p>
+                                <p class="text-comet small opacity-75">Profitez de cette journée libre !</p>
+                            </div>
+                            {% else %}
+                                <div class="d-flex flex-column gap-3">
+                                    {% for item in tasks %}
+                                    <div class="cosmic-card border-0 mission-item">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h6 class="montserrat fw-semibold text-stardust mb-0 small">{{ item.getTaskTitle }}</h6>
+                                                <span class="badge cosmic-status">{{ item.getStatusName }}</span>
+                                            </div>
+                                            {% if item.getTaskDesc %}
+                                            <p class="text-comet small mb-2 opacity-75">{{ item.getTaskDesc}}</p>
+                                            {% endif %}
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-comet opacity-75">
+                                                    <i class="bi bi-clock me-1"></i>{{ item.getTaskDueDate }}
+                                                </small>
+                                                <div class="d-flex gap-1">
+                                                    <a href="./?pg=update&id={{ item.getId }}" class="btn btn-sm cosmic-btn-icon">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-calendar-x display-5 text-comet opacity-50 mb-3"></i>
+                            <p class="text-comet mb-2 small">Sélectionnez une date</p>
+                            <p class="text-comet small opacity-75">Cliquez sur une date du calendrier</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 {% endblock %}
-
 {% block javascript %}
+{{ parent() }}
 <script>
 (() => {
-  // Minimal calendar that fetches tasks per month and marks cells with class 'has-task'
-  let month = new Date().getMonth() + 1; // 1-12
-  let year = new Date().getFullYear();
+    let month = new Date().getMonth() + 1;
+    let year = new Date().getFullYear();
 
-  const monthYearEl = document.getElementById('monthYear');
-  const body = document.getElementById('body');
+    const monthYearEl = document.getElementById('monthYear');
+    const calendarBody = document.getElementById('calendarBody');
 
-  document.getElementById('prev').addEventListener('click', () => { changeMonth(-1); });
-  document.getElementById('next').addEventListener('click', () => { changeMonth(1); });
+    document.getElementById('prev').addEventListener('click', () => { changeMonth(-1); });
+    document.getElementById('next').addEventListener('click', () => { changeMonth(1); });
 
-  function changeMonth(delta) {
-    month += delta;
-    if (month < 1) { month = 12; year -= 1; }
-    if (month > 12) { month = 1; year += 1; }
-    load();
-  }
-
-  function formatDate(y,m,d){
-    return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  }
-
-  async function load(){
-    monthYearEl.textContent = `${month}/${year}`;
-    body.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
-
-    try {
-      const res = await fetch(`?pg=api_calendar&month=${month}&year=${year}`);
-      if (!res.ok) throw new Error(res.statusText);
-      const json = await res.json();
-      const tasks = json.tasks || [];
-      console.log(tasks);
-      
-      // Build a set of dates that have tasks for quick lookup
-      const dates = new Set(tasks.map(t => t.task_due_date));
-
-      // Render calendar grid
-      const firstDay = new Date(year, month - 1, 1).getDay(); 
-      const start = firstDay === 0 ? 6 : firstDay - 1;
-      const days = new Date(year, month, 0).getDate();
-      const currentDay = new Date().getDate();
-      const today = new Date();
-      const isCurrentMonth = (year === today.getFullYear() && month === today.getMonth() + 1);
-
-      body.innerHTML = '';
-      let cur = 1;
-
-      for (let week=0; week<6; week++){
-        const tr = document.createElement('tr');
-        for (let d=0; d<7; d++){
-          const td = document.createElement('td');
-          if (week===0 && d<start){
-            td.textContent = '';
-          } else if (cur <= days){
-            td.textContent = cur;
-            const dateStr = formatDate(year, month, cur);
-            if (isCurrentMonth&&cur==currentDay) {
-                td.classList.add('currentDay');
-            }
-            tasks.forEach(e => {
-              if (e.task_due_date==dateStr){
-                url =`http://taskapp/public/?pg=task_date&&date=${e.task_due_date}`;
-                const link = document.createElement('a');
-                link.setAttribute('href',url);
-                link.classList.add('cell-link');
-
-                link.innerHTML = td.innerHTML;
-                td.innerHTML = '';
-                td.appendChild(link);
-                td.classList.add('has-task');
-              }
-            });
-            cur++;
-          } else {
-            td.textContent = '';
-          }
-          tr.appendChild(td);
-        }
-        body.appendChild(tr);
-        if (cur > days) break;
-      }
-
-    } catch (e){
-      body.innerHTML = `<tr><td colspan="7">Erreur: ${e.message}</td></tr>`;
+    function changeMonth(delta) {
+        month += delta;
+        if (month < 1) { month = 12; year -= 1; }
+        if (month > 12) { month = 1; year += 1; }
+        loadCalendar();
     }
-  }
 
-  load();
+    function formatDate(y,m,d){
+        return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    async function loadCalendar(){
+        monthYearEl.textContent = `${getMonthName(month)} ${year}`;
+        calendarBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="p-5 text-comet">
+                    <div class="d-flex justify-content-center align-items-center py-4">
+                        <div class="spinner-border text-quantum me-3" role="status"></div>
+                        <span>Chargement des missions spatiales...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        try {
+            const res = await fetch(`?pg=api_calendar&month=${month}&year=${year}`);
+            if (!res.ok) throw new Error(res.statusText);
+            const json = await res.json();
+            const tasks = json.tasks || [];
+            
+            const datesWithTasks = new Set(tasks.map(t => t.task_due_date));
+
+            const firstDay = new Date(year, month - 1, 1).getDay();
+            const start = firstDay === 0 ? 6 : firstDay - 1;
+            const days = new Date(year, month, 0).getDate();
+            const currentDay = new Date().getDate();
+            const today = new Date();
+            const isCurrentMonth = (year === today.getFullYear() && month === today.getMonth() + 1);
+
+            calendarBody.innerHTML = '';
+            let cur = 1;
+
+            for (let week=0; week<6; week++){
+                const tr = document.createElement('tr');
+                for (let d=0; d<7; d++){
+                    const td = document.createElement('td');
+                    
+                    if (week===0 && d<start){
+                        td.innerHTML = '';
+                        td.className = 'calendar-day empty';
+                    } else if (cur <= days){
+                        const dateStr = formatDate(year, month, cur);
+                        const hasMission = datesWithTasks.has(dateStr);
+                        const isCurrent = isCurrentMonth && cur === currentDay;
+                        
+                        td.className = `calendar-day ${hasMission ? 'has-mission' : ''} ${isCurrent ? 'current-day' : ''}`;
+                        
+                        const dayContent = document.createElement('div');
+                        dayContent.className = 'day-content h-100 d-flex flex-column justify-content-between';
+                        
+                        const dayNumber = document.createElement('div');
+                        dayNumber.className = 'day-number';
+                        dayNumber.textContent = cur;
+                        
+                        dayContent.appendChild(dayNumber);
+                        
+                        if (hasMission) {
+                            const missionIndicator = document.createElement('div');
+                            missionIndicator.className = 'mission-indicator';
+                            missionIndicator.innerHTML = '<div class="mission-dot"></div>';
+                            dayContent.appendChild(missionIndicator);
+                        }
+                        
+                        if (hasMission) {
+                            const link = document.createElement('a');
+                            link.href = `?pg=task_date&date=${dateStr}`;
+                            link.className = 'stretched-link';
+                            link.appendChild(dayContent);
+                            td.appendChild(link);
+                        } else {
+                            td.appendChild(dayContent);
+                        }
+                        
+                        cur++;
+                    } else {
+                        td.innerHTML = '';
+                        td.className = 'calendar-day empty';
+                    }
+                    tr.appendChild(td);
+                }
+                calendarBody.appendChild(tr);
+                if (cur > days) break;
+            }
+
+        } catch (e){
+            calendarBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="p-5 text-danger">
+                        <div class="text-center">
+                            <i class="bi bi-exclamation-triangle display-6 text-danger mb-3"></i>
+                            <p>Erreur de chargement : ${e.message}</p>
+                            <button onclick="loadCalendar()" class="btn stellar-btn mt-2">Réessayer</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    function getMonthName(month) {
+        const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                       'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        return months[month - 1];
+    }
+
+    // Chargement initial
+    loadCalendar();
 })();
 </script>
 {% endblock %}

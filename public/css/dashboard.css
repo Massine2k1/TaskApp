@@ -1,0 +1,31 @@
+/* ===================================
+   DASHBOARD - TASKFLOW
+   =================================== */
+
+/* Container des graphiques */
+.chart-container {
+    background: rgba(26, 27, 45, 0.5);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+}
+
+/* Responsive dashboard */
+@media (max-width: 768px) {
+    .chart-container {
+        height: 50vh !important;
+        min-height: 300px;
+    }
+    
+    .btn-group .btn {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .cosmic-card {
+        margin-top: 2em;
+    }
+}

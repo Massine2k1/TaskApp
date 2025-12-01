@@ -14,8 +14,9 @@ $twig->addGlobal('session', $_SESSION ?? []);
 if (empty($_GET)) {
 
     $tasks = $taskManager->getAllTasks();
+    $statusTask = $taskManager->getTaskCountsByStatus();
     
-    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks]);    
+    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks,'statusTask'=>$statusTask]);    
 }elseif (isset($_GET['pg'])) {
    
     switch ($_GET['pg']) {
@@ -63,6 +64,35 @@ if (empty($_GET)) {
                 }
             }
             echo $twig->render('updateTask.html.twig', ['item' => $task, 'error' => $error]);
+            break;
+        case 'api_update_status':
+            header('Content-Type: application/json');
+            
+            if ($_SERVER['REQUEST_METHOD']!=='POST') {
+                http_response_code(405);
+                echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            }
+            $data = json_decode(file_get_contents('php://input'), true);
+            $taskId = $data['task_id'] ?? null;
+            $statusId = $data['status_id'] ?? null;
+
+            if (!$taskId || !$statusId) {
+                echo json_encode(['success' => false, 'message' => 'Paramètres manquants']);
+                return;
+            }
+
+            try {
+                $success = $taskManager->updateTaskStatus($taskId, $statusId);
+        
+                if ($success) {
+                    echo json_encode(['success' => true, 'message' => 'Statut mis à jour']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Erreur de mise à jour']);
+                }
+            }catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            }     
+
             break;
         case 'delete':
             $taskManager->deleteTask($_GET['id']);
@@ -144,6 +174,8 @@ if (empty($_GET)) {
         }
 }else {
     $tasks = $taskManager->getAllTasksByStatus((int)$_GET['status_id']);
+    $statusTask = $taskManager->getTaskCountsByStatus();
+    $statusId = (int)$_GET['status_id'];    
     
-    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks]);      
+    echo $twig->render('tasklist.html.twig', ['tasks' => $tasks, 'statusTask'=>$statusTask, 'status_id'=>$statusId]);      
 }

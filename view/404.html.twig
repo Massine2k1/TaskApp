@@ -1,0 +1,73 @@
+{% extends "template.front.twig" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-80 py-4">
+    <div class="col-12 col-md-8 col-lg-6 text-center">
+        <div class="cosmic-card border-0 stellar-rise">
+            <div class="card-body p-4 p-md-5">
+                <!-- Illustration Étoilée -->
+                <div class="mb-4 cosmic-float">
+                    <i class="bi bi-search display-1" style="background: linear-gradient(135deg, var(--comet), var(--quantum-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                </div>
+                
+                <!-- Code erreur -->
+                <h1 class="cosmic-title montserrat mb-3" style="font-size: 4rem;">404</h1>
+                <h2 class="montserrat h4 text-comet mb-4">Mission introuvable</h2>
+                
+                <p class="text-comet mb-4 fs-6">
+                    La page que vous recherchez semble s'être échappée dans l'espace. 
+                    Elle a peut-être été déplacée ou n'existe plus dans cette dimension.
+                </p>
+                
+                <!-- Navigation rapide -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <a href="./" class="btn cosmic-btn-outline w-100 h-100 p-2 p-md-3">
+                            <i class="bi bi-house d-block mb-1 fs-5"></i>
+                            <small>Accueil</small>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="./?pg=tasklist" class="btn cosmic-btn-outline w-100 h-100 p-2 p-md-3">
+                            <i class="bi bi-list-task d-block mb-1 fs-5"></i>
+                            <small>Missions</small>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="./?pg=calendrier" class="btn cosmic-btn-outline w-100 h-100 p-2 p-md-3">
+                            <i class="bi bi-calendar3 d-block mb-1 fs-5"></i>
+                            <small>Calendrier</small>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a href="./?pg=dashboard" class="btn cosmic-btn-outline w-100 h-100 p-2 p-md-3">
+                            <i class="bi bi-bar-chart d-block mb-1 fs-5"></i>
+                            <small>Dashboard</small>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Action principale -->
+                <div class="d-grid">
+                    <a href="./" class="btn stellar-btn">
+                        <i class="bi bi-rocket me-2"></i>
+                        Retour à la base spatiale
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+    .cosmic-title[style*="font-size: 4rem"] {
+        font-size: 3rem !important;
+    }
+    
+    .btn cosmic-btn-outline {
+        padding: 0.5rem !important;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,337 @@
+/* ===================================
+   PAGE D'ACCUEIL - TASKFLOW
+   =================================== */
+
+/* Hero Section */
+.hero-section {
+    background: rgba(10, 11, 20, 0.5);
+}
+
+/* Icônes avec dégradés */
+.icon-gradient-primary {
+    background: linear-gradient(135deg, var(--supernova), var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-dashboard {
+    background: linear-gradient(135deg, var(--quantum-blue), var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-calendar {
+    background: linear-gradient(135deg, var(--supernova), #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-tasks {
+    background: linear-gradient(135deg, #10b981, var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-ai {
+    background: linear-gradient(135deg, var(--quantum-blue), var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-security {
+    background: linear-gradient(135deg, var(--supernova), #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-scalability {
+    background: linear-gradient(135deg, #ef4444, var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Titres avec dégradés */
+.title-gradient {
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, var(--quantum-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle-gradient {
+    font-weight: 700;
+}
+
+/* Bouton outline personnalisé */
+.btn-outline-cosmic {
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Animations avec délais */
+.stellar-rise-1 {
+    animation-delay: 0.3s;
+}
+
+.stellar-rise-2 {
+    animation-delay: 0.6s;
+}
+
+.stellar-rise-3 {
+    animation-delay: 0.9s;
+}
+
+.pulsate-1 {
+    animation-delay: 0.2s;
+}
+
+.pulsate-2 {
+    animation-delay: 0.4s;
+}
+
+.pulsate-3 {
+    animation-delay: 0.6s;
+}
+
+/* Placeholders cosmiques */
+.cosmic-placeholder {
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+}
+
+.cosmic-placeholder:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.02);
+}
+
+/* Carousel cosmique personnalisé */
+.cosmic-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.cosmic-carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    height: 100%;
+}
+
+.cosmic-carousel-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: none;
+}
+
+.cosmic-carousel-slide.active {
+    opacity: 1;
+    display: block;
+}
+
+/* Flèches de navigation */
+.cosmic-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(26, 27, 45, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    color: var(--quantum-blue);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    opacity: 0.7;
+}
+
+.cosmic-carousel-arrow:hover {
+    opacity: 1;
+    background: rgba(37, 99, 235, 0.3);
+    border-color: var(--quantum-blue);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.cosmic-carousel-prev {
+    left: 20px;
+}
+
+.cosmic-carousel-next {
+    right: 20px;
+}
+
+/* Indicateurs */
+.cosmic-carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.cosmic-carousel-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cosmic-carousel-indicator.active {
+    background: var(--quantum-blue);
+    transform: scale(1.2);
+}
+
+.cosmic-carousel-indicator:hover {
+    background: var(--pulsar-purple);
+    transform: scale(1.1);
+}
+
+/* Cartes de taille égale */
+.equal-height-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.equal-height-card .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.equal-height-card .content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Grille des avantages */
+.advantage-grid .cosmic-card {
+    height: 100%;
+}
+
+.advantage-grid .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .cosmic-carousel-arrow {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .min-vh-60 {
+        min-height: 400px;
+    }
+    
+    .cosmic-placeholder {
+        height: 200px;
+    }
+    
+    .cosmic-carousel-arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .cosmic-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .cosmic-subtitle {
+        font-size: 1.1rem !important;
+    }
+    
+    .min-vh-60 {
+        min-height: 350px;
+    }
+    
+    .cosmic-placeholder {
+        height: 180px;
+        margin-top: 1.5rem;
+    }
+    
+    .cosmic-carousel-arrow {
+        display: none; /* Cacher les flèches sur mobile */
+    }
+    
+    .cosmic-carousel-indicators {
+        bottom: 10px;
+    }
+    
+    .min-vh-80 {
+        min-height: 70vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .cosmic-title {
+        font-size: 2rem !important;
+    }
+    
+    .cosmic-subtitle {
+        font-size: 1rem !important;
+    }
+    
+    .btn-lg {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .cosmic-card {
+        margin: 0 -0.5rem;
+    }
+    
+    .min-vh-60 {
+        min-height: 300px;
+    }
+    
+    .cosmic-placeholder {
+        height: 150px;
+    }
+    
+    .cosmic-carousel-indicators {
+        bottom: 5px;
+    }
+    
+    .cosmic-carousel-indicator {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .min-vh-80 {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .subtitle-gradient {
+        font-weight: 600;
+    }
+}

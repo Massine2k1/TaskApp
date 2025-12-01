@@ -1,13 +1,321 @@
 {% extends "template.front.twig" %}
 
-{% block title %}{{ parent() }} | Homepage {% endblock %}
+{% block css %}
+{{ parent() }}
+<link href="./css/homepage.css" rel="stylesheet">
+{% endblock %}
 
-{% block nav %}TaskFlow{% endblock %}
 {% block content %}
-<h1>Bienvenue sur la page d'accueil</h1>
-<p>Transformez vos idées en actions</p>
-<div>
-  <div><a href='./?pg=connexion'>se connecter</a></div>
-  <div><a href='./?pg=inscription'>s'inscrire</a></div>
-</div>
+<!-- Hero Section Cosmique -->
+<section class="text-center mb-5 py-4 py-md-5">
+    <div class="cosmic-card border-0 p-3 p-md-4 p-lg-5 mb-4 mb-md-5 stellar-rise hero-section">
+        <div class="card-body py-4 py-md-5">
+            <!-- Logo Étoilé -->
+            <div class="mb-3 mb-md-4 cosmic-float">
+                <i class="bi bi-rocket-fill display-4 display-md-1 icon-gradient-primary"></i>
+            </div>
+            
+            <!-- Titre Principal -->
+            <h1 class="cosmic-title montserrat mb-3 mb-md-4">
+                TASKFLOW
+            </h1>
+            
+            <!-- Sous-titre -->
+            <p class="cosmic-subtitle montserrat mb-3 mb-md-4 stellar-rise stellar-rise-1">
+                Votre productivité, élevée au rang d'art
+            </p>
+            
+            <p class="text-comet mb-4 mb-md-5 fs-6 fs-md-5 stellar-rise stellar-rise-2">
+                L'outil de gestion qui transforme vos tâches en accomplissements stellaires
+            </p>
+            
+            <!-- Boutons CTA -->
+            <div class="d-grid gap-2 gap-md-3 d-sm-flex justify-content-sm-center stellar-rise stellar-rise-3">
+                <a href="./?pg=connexion" class="btn stellar-btn px-4 px-md-5 py-2 py-md-3 montserrat fs-6 fs-md-5">
+                    <i class="bi bi-rocket me-2"></i>Décoller maintenant
+                </a>
+                <a href="./?pg=inscription" class="btn btn-outline-light px-4 px-md-5 py-2 py-md-3 montserrat fs-6 fs-md-5 btn-outline-cosmic">
+                    <i class="bi bi-star me-2"></i>Explorer l'espace
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- NOUVEAU CAROUSEL CSS/JS -->
+<section class="mb-5">
+    <div class="cosmic-card p-3 p-md-4">
+        <div class="card-body p-3 p-md-4">
+            <h2 class="text-center montserrat h2 h3-md mb-4 mb-md-5 title-gradient">
+                Univers de Fonctionnalités
+            </h2>
+            
+            <div class="cosmic-carousel-container">
+                <div class="cosmic-carousel-track">
+                    <!-- Slide Dashboard -->
+                    <div class="cosmic-carousel-slide active">
+                        <div class="row align-items-center min-vh-60 py-3 py-md-4 py-lg-5 equal-height-card">
+                            <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                                <div class="content-wrapper">
+                                    <div class="mb-3 mb-md-4">
+                                        <i class="bi bi-graph-up-arrow display-4 display-md-2 mb-3 mb-md-4 icon-gradient-dashboard"></i>
+                                        <h3 class="montserrat h2 h3-md mb-3 subtitle-gradient">Dashboard Intelligent</h3>
+                                        <p class="text-comet fs-6 fs-md-5 mb-3 mb-md-4">
+                                            Plongez dans l'analytique de votre productivité avec des visualisations 
+                                            qui racontent l'histoire de votre réussite.
+                                        </p>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mb-lg-3 justify-content-center justify-content-lg-start">
+                                        <span class="badge cosmic-badge">Analytics Temps Réel</span>
+                                        <span class="badge cosmic-badge">Visualisation 3D</span>
+                                        <span class="badge cosmic-badge">Rapports IA</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 text-center">
+                                <div class="position-relative">
+                                    <!-- Desktop Version -->
+                                    <img src="./image/dashboard.png" alt="Interface Dashboard Desktop" class="img-fluid rounded-3 border border-quantum d-none d-md-block" style="width: 100%">
+                                    <!-- Mobile Version -->
+                                    <img src="./image/dashboardmobile.png" alt="Interface Dashboard Mobile" class="img-fluid rounded-3 border border-quantum d-block d-md-none" style="width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide Calendrier -->
+                    <div class="cosmic-carousel-slide">
+                        <div class="row align-items-center min-vh-60 py-3 py-md-4 py-lg-5 equal-height-card">
+                            <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                                <div class="content-wrapper">
+                                    <div class="mb-3 mb-md-4">
+                                        <i class="bi bi-calendar-heart display-4 display-md-2 mb-3 mb-md-4 icon-gradient-calendar"></i>
+                                        <h3 class="montserrat h2 h3-md mb-3 subtitle-gradient">Calendrier Dimensionnel</h3>
+                                        <p class="text-comet fs-6 fs-md-5 mb-3 mb-md-4">
+                                            Naviguez dans le temps avec un calendrier qui s'adapte 
+                                            à votre flux de travail, pas l'inverse.
+                                        </p>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mb-lg-3 justify-content-center justify-content-lg-start">
+                                        <span class="badge cosmic-badge">Vue Temporelle</span>
+                                        <span class="badge cosmic-badge">Synchronisation</span>
+                                        <span class="badge cosmic-badge">Intelligence Artificielle</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 text-center">
+                                <div class="position-relative">
+                                    <!-- Desktop Version -->
+                                    <img src="./image/calendar.png" alt="Calendrier Desktop" class="img-fluid rounded-3 border border-supernova d-none d-md-block" style="width: 100%;">
+                                    <!-- Mobile Version -->
+                                    <img src="./image/calendarmobile.png" alt="Calendrier Mobile" class="img-fluid rounded-3 border border-supernova d-block d-md-none" style="width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide Tâches -->
+                    <div class="cosmic-carousel-slide">
+                        <div class="row align-items-center min-vh-60 py-3 py-md-4 py-lg-5 equal-height-card">
+                            <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                                <div class="content-wrapper">
+                                    <div class="mb-3 mb-md-4">
+                                        <i class="bi bi-kanban display-4 display-md-2 mb-3 mb-md-4 icon-gradient-tasks"></i>
+                                        <h3 class="montserrat h2 h3-md mb-3 subtitle-gradient">Gestion Quantique</h3>
+                                        <p class="text-comet fs-6 fs-md-5 mb-3 mb-md-4">
+                                            Organisez vos tâches dans un espace où l'efficacité 
+                                            rencontre l'élégance et la puissance.
+                                        </p>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2 mb-lg-3 justify-content-center justify-content-lg-start">
+                                        <span class="badge cosmic-badge">Flux Visuel</span>
+                                        <span class="badge cosmic-badge">Automation</span>
+                                        <span class="badge cosmic-badge">Collaboration</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 text-center">
+                                <div class="position-relative">
+                                    <!-- Desktop Version -->
+                                    <img src="./image/homepage.png" alt="Gestion Tâches Desktop" class="img-fluid rounded-3 border border-success d-none d-md-block" style="width: 100%;">
+                                    <!-- Mobile Version -->
+                                    <img src="./image/homepagemobile.png" alt="Gestion Tâches Mobile" class="img-fluid rounded-3 border border-success d-block d-md-none" style="width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Flèches de navigation -->
+                <button class="cosmic-carousel-arrow cosmic-carousel-prev">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="cosmic-carousel-arrow cosmic-carousel-next">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+                
+                <!-- Indicateurs -->
+                <div class="cosmic-carousel-indicators pt-5">
+                    <button class="cosmic-carousel-indicator active" data-slide="0"></button>
+                    <button class="cosmic-carousel-indicator" data-slide="1"></button>
+                    <button class="cosmic-carousel-indicator" data-slide="2"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Grille des Avantages -->
+<section class="mb-5">
+    <div class="row g-3 g-md-4 advantage-grid">
+        <div class="col-md-4">
+            <div class="cosmic-card h-100 text-center p-3 p-md-4 border-0 pulsate pulsate-1">
+                <div class="card-body">
+                    <i class="bi bi-cpu display-5 display-md-4 mb-2 mb-md-3 icon-gradient-ai"></i>
+                    <h4 class="montserrat h5 h6-md mb-2 mb-md-3 subtitle-gradient">Intelligence Artificielle</h4>
+                    <p class="text-comet small">Algorithmes prédictifs qui anticipent vos besoins</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cosmic-card h-100 text-center p-3 p-md-4 border-0 pulsate pulsate-2">
+                <div class="card-body">
+                    <i class="bi bi-shield-check display-5 display-md-4 mb-2 mb-md-3 icon-gradient-security"></i>
+                    <h4 class="montserrat h5 h6-md mb-2 mb-md-3 subtitle-gradient">Sécurité Quantique</h4>
+                    <p class="text-comet small">Protection de niveau militaire pour vos données</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cosmic-card h-100 text-center p-3 p-md-4 border-0 pulsate pulsate-3">
+                <div class="card-body">
+                    <i class="bi bi-infinity display-5 display-md-4 mb-2 mb-md-3 icon-gradient-scalability"></i>
+                    <h4 class="montserrat h5 h6-md mb-2 mb-md-3 subtitle-gradient">Évolutivité Infinie</h4>
+                    <p class="text-comet small">Adapté aux projets personnels comme aux entreprises</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script>
+// NOUVEAU CAROUSEL JS
+class CosmicCarousel {
+    constructor(container) {
+        this.container = container;
+        this.track = container.querySelector('.cosmic-carousel-track');
+        this.slides = Array.from(container.querySelectorAll('.cosmic-carousel-slide'));
+        this.indicators = Array.from(container.querySelectorAll('.cosmic-carousel-indicator'));
+        this.prevBtn = container.querySelector('.cosmic-carousel-prev');
+        this.nextBtn = container.querySelector('.cosmic-carousel-next');
+        
+        this.currentSlide = 0;
+        this.slideCount = this.slides.length;
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 5000; // 5 secondes
+        
+        this.init();
+    }
+    
+    init() {
+        // Événements pour les flèches
+        this.prevBtn.addEventListener('click', () => this.prev());
+        this.nextBtn.addEventListener('click', () => this.next());
+        
+        // Événements pour les indicateurs
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.prev();
+            if (e.key === 'ArrowRight') this.next();
+        });
+        
+        // Auto-play
+        this.startAutoPlay();
+        
+        // Pause auto-play au survol
+        this.container.addEventListener('mouseenter', () => this.stopAutoPlay());
+        this.container.addEventListener('mouseleave', () => this.startAutoPlay());
+        
+        // Support tactile
+        this.setupTouchEvents();
+    }
+    
+    goToSlide(index) {
+        if (index < 0) index = this.slideCount - 1;
+        if (index >= this.slideCount) index = 0;
+        
+        // Mettre à jour les slides
+        this.slides.forEach(slide => slide.classList.remove('active'));
+        this.slides[index].classList.add('active');
+        
+        // Mettre à jour les indicateurs
+        this.indicators.forEach(indicator => indicator.classList.remove('active'));
+        this.indicators[index].classList.add('active');
+        
+        this.currentSlide = index;
+    }
+    
+    next() {
+        this.goToSlide(this.currentSlide + 1);
+    }
+    
+    prev() {
+        this.goToSlide(this.currentSlide - 1);
+    }
+    
+    startAutoPlay() {
+        this.stopAutoPlay();
+        this.autoPlayInterval = setInterval(() => this.next(), this.autoPlayDelay);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+    
+    setupTouchEvents() {
+        let startX = 0;
+        let endX = 0;
+        
+        this.container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        
+        this.container.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            this.handleSwipe(startX, endX);
+        });
+    }
+    
+    handleSwipe(startX, endX) {
+        const swipeThreshold = 50;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                this.next(); // Swipe gauche
+            } else {
+                this.prev(); // Swipe droite
+            }
+        }
+    }
+}
+
+// Initialisation du carousel
+document.addEventListener('DOMContentLoaded', () => {
+    const carouselContainer = document.querySelector('.cosmic-carousel-container');
+    if (carouselContainer) {
+        new CosmicCarousel(carouselContainer);
+    }
+});
+</script>
 {% endblock %}

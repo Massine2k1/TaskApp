@@ -1,0 +1,127 @@
+/* ===================================
+   GESTION DES TÂCHES - TASKFLOW
+   =================================== */
+
+/* Cartes de tâches */
+.task-card {
+    transition: all 0.3s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+.task-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Menu déroulant mobile pour filtres */
+.filter-dropdown {
+    background: rgba(26, 27, 45, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.cosmic-filter-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--comet);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cosmic-filter-item:last-child {
+    border-bottom: none;
+}
+
+.cosmic-filter-item:hover,
+.cosmic-filter-item.active {
+    background: var(--quantum-blue);
+    color: white;
+}
+
+#dropdownIcon {
+    transition: transform 0.3s ease;
+}
+
+#dropdownIcon.rotated {
+    transform: rotate(180deg);
+}
+
+/* Select cosmique pour statuts */
+.cosmic-select {
+    background: rgba(26, 27, 45, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--stardust);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    transition: all 0.3s ease;
+    width: auto;
+    min-width: 130px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cosmic-select:focus {
+    border-color: var(--quantum-blue);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: rgba(26, 27, 45, 0.9);
+    outline: none;
+}
+
+.cosmic-select:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(26, 27, 45, 0.85);
+}
+
+.cosmic-select option {
+    background: rgba(15, 15, 19, 0.95);
+    color: var(--stardust);
+    padding: 0.5rem;
+}
+
+/* Masquer le dropdown par défaut */
+.filter-dropdown {
+    display: none;
+}
+
+/* Container pour le select avec icône */
+.select-with-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.select-with-icon .bi-chevron-down {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--comet);
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+.cosmic-select {
+    padding-right: 2rem !important;
+}
+
+/* Responsive tasks */
+@media (max-width: 768px) {
+    .task-card {
+        margin: 0 -0.5rem;
+    }
+    
+    .cosmic-filter {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}

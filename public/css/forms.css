@@ -1,0 +1,81 @@
+/* ===================================
+   FORMULAIRES - TASKFLOW
+   =================================== */
+
+/* Icônes avec dégradés pour formulaires */
+.icon-gradient-form {
+    background: linear-gradient(135deg, var(--quantum-blue), var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-gradient-register {
+    background: linear-gradient(135deg, var(--supernova), var(--pulsar-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Liens avec couleur quantum */
+.link-quantum {
+    color: var(--quantum-blue);
+}
+
+/* Messages d'erreur */
+.error-card {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Inputs cosmiques */
+.cosmic-input {
+    background: rgba(26, 27, 45, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--stardust) !important;
+    border-radius: 8px;
+}
+
+.cosmic-input:focus {
+    border-color: var(--quantum-blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    background: rgba(26, 27, 45, 0.9) !important;
+}
+
+/* Input groups */
+.cosmic-input .form-control,
+.cosmic-input .input-group-text {
+    background: rgba(26, 27, 45, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--stardust) !important;
+}
+
+.cosmic-input .form-control:focus {
+    border-color: var(--quantum-blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+}
+
+/* Labels */
+.form-label {
+    color: var(--comet);
+    font-weight: 600;
+}
+
+/* Form text */
+.form-text {
+    color: var(--comet);
+    font-size: 0.875rem;
+}
+
+/* Responsive forms */
+@media (max-width: 768px) {
+    .cosmic-card .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .cosmic-card {
+        margin-top: 2em;
+    }
+    
+    .icon-gradient-form {
+        font-size: 2.5rem !important;
+    }
+}
