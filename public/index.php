@@ -11,8 +11,12 @@ session_start();
 // Chargement de l'autoload Composer
 require_once '../vendor/autoload.php';
 
-// Chargement de la configuration
-require_once '../config/configdev.php';
+// Chargement de la configuration selon l'environnement
+if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['DB_HOST'])) {
+    require_once '../config/configprod.php';
+} else {
+    require_once '../config/configdev.php';
+}
 
 $loader = new FilesystemLoader(RACINE_PATH . '/../view');
 
