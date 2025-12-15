@@ -17,7 +17,8 @@ class TaskMapping extends AbstractMapping
     protected ?int $task_status_id = null;
     protected ?string $task_due_date = null;
     protected ?string $task_created_at = null;
-    
+    private $error = [];
+
     // champ de jointure pour le nom du statut
     protected ?string $status_name = null;
     
@@ -59,7 +60,7 @@ class TaskMapping extends AbstractMapping
     {
         $task_title = htmlspecialchars(strip_tags(trim($task_title)));
         if(strlen($task_title) < 3 || strlen($task_title) > 100){
-            throw new Exception("Le titre de la tâche doit faire entre 3 et 100 caractères");
+            $this->error[] = "Le titre de la tâche doit faire entre 3 et 100 caractères";
         }
         $this->task_title = $task_title;
     }
@@ -77,7 +78,7 @@ class TaskMapping extends AbstractMapping
         }
         $task_desc = htmlspecialchars(strip_tags(trim($task_desc)));
         if(strlen($task_desc) > 500){
-            throw new Exception("La description de la tâche ne peut pas dépasser 500 caractères");
+            $this->error[] = "La description de la tâche ne peut pas dépasser 500 caractères";
         }
         $this->task_desc = $task_desc;
     }
@@ -118,8 +119,15 @@ class TaskMapping extends AbstractMapping
             return;
         }
         $date = date('Y-m-d', strtotime($task_due_date));
-        if(!$date) throw new Exception("La date d'échéance n'est pas au bon format");
-        $this->task_due_date = $date;
+        if(!$date) $this->error[]= "La date d'échéance n'est pas au bon format";
+
+        if (empty($date)) {
+            $this->error[] = "La date d'échéance est obligatoire";
+        } elseif ($date < date('Y-m-d')) {
+            $this->error[] = "La date ne peut pas être dans le passé";
+        } else {
+            $this->task_due_date = $date;
+        }
     }
 
     public function getTaskCreatedAt(): ?string
@@ -136,6 +144,14 @@ class TaskMapping extends AbstractMapping
         $date = date('Y-m-d H:i:s', strtotime($task_created_at));
         if(!$date) throw new Exception("La date de création n'est pas au bon format");
         $this->task_created_at = $date;
+    }
+
+    public function getErrors() {
+        return $this->error;
+    }
+    
+    public function isValid() {
+        return empty($this->error);
     }
 
     public function jsonSerialize(): array

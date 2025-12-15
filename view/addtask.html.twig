@@ -11,12 +11,14 @@
             </div>
             
             <div class="card-body p-3 p-md-4 p-lg-5">
-                {% if error is defined %}
+                {% if error is not empty%}
                 <div class="cosmic-card mb-4" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3) !important;">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-exclamation-triangle text-danger me-3"></i>
-                            <p class="text-danger mb-0">{{ error }}</p>
+                            {% for item in error %}                                
+                            <p class="text-danger mb-0">{{ item }}</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -34,9 +36,9 @@
                                    class="form-control cosmic-input" 
                                    id="task_title" 
                                    name="task_title" 
-                                   required 
-                                   minlength="3" 
-                                   maxlength="100"
+                                    maxlength="100"
+                                    minlength = "3"
+                                    required
                                    placeholder="Ex: Préparer le lancement du projet Alpha">
                             <div class="form-text text-comet">Entre 3 et 100 caractères</div>
                         </div>
@@ -55,9 +57,11 @@
                         <div class="col-12 col-md-6">
                             <label for="task_due_date" class="form-label text-comet fw-semibold">Date d'échéance</label>
                             <input type="date" 
-                                   class="form-control cosmic-input" 
-                                   id="task_due_date" 
-                                   name="task_due_date">
+                                class="form-control cosmic-input" 
+                                id="task_due_date" 
+                                min="{{ 'now'|date('Y-m-d') }}" 
+                                required
+                                name="task_due_date">
                         </div>
                     </div>
                     

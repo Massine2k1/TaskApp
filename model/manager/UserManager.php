@@ -101,7 +101,7 @@ public function register(array $data): bool
 private function sendVerificationEmail(int $userId, string $email, string $token): bool
     {
         // --- Configuration Mailer (Utilisez des constantes ou variables d'environnement !) ---
-        $verification_link = "http://taskapp/public/?pg=verification&id={$userId}&token={$token}";
+        $verification_link = "https://task-app.infinityfreeapp.com/public/?pg=verification&id={$userId}&token={$token}";
         $mail = new PHPMailer(true);
 
         try {

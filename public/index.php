@@ -12,7 +12,7 @@ session_start();
 require_once '../vendor/autoload.php';
 
 // Chargement de la configuration selon l'environnement
-if (isset($_ENV['RAILWAY_ENVIRONMENT']) || isset($_ENV['DB_HOST'])) {
+if ($_SERVER['HTTP_HOST'] === 'task-app.infinityfreeapp.com') {
     require_once '../config/configprod.php';
 } else {
     require_once '../config/configdev.php';
