@@ -10,6 +10,7 @@ $taskManager = new TaskManager($connectPDO);
 $statusCounts = $taskManager->getTaskCountsByStatus();
 $twig->addGlobal('statusCounts', $statusCounts);
 $twig->addGlobal('session', $_SESSION ?? []);
+$error = [];
 
 if (empty($_GET)) {
 
@@ -32,20 +33,24 @@ if (empty($_GET)) {
         case 'addtask':
 
             if (isset($_POST['task_title'],$_POST['task_desc'],$_POST['task_due_date'])) {
-                
-                $_POST['user_id'] = (int) $_POST['user_id'];
-                $task = new TaskMapping($_POST);
-                $result = $taskManager->addTask($task);
-                if ($result===true) {
-                    header('Location:./');
+                if (!empty($_POST['task_title'])&&!empty($_POST['task_desc'])&&!empty($_POST['task_due_date'])&&!empty($_POST['user_id'])) {
+                    
+                    $_POST['user_id'] = (int) $_POST['user_id'];
+                    $task = new TaskMapping($_POST);
+                    if ($task->isValid()) {
+                        $result = $taskManager->addTask($task);
+                        if ($result===true) {
+                            header('Location:./');
+                        }
+                    }else {
+                       $error = $task->getErrors(); 
+                    }
                 }else {
-                    $error = 'Veuillez remplir tous les champs';
+                    $error[] = 'Veuillez remplir tous les champs';
                 }
-            }else {
-                $error = 'Veuillez remplir tous les champs';
+                
             }
-
-            echo $twig->render('addtask.html.twig');
+            echo $twig->render('addtask.html.twig', ['error' => $error]);
             break;
         case 'update':
         

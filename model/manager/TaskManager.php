@@ -21,6 +21,8 @@ class TaskManager implements ManagerInterface
 
     public function getAllTasks():array | bool
     {
+        $this->updateOverdueTasks();
+
         $userId = $_SESSION['id'];
         $sql = "SELECT t.id,
                        t.task_title,
@@ -52,6 +54,12 @@ class TaskManager implements ManagerInterface
             return false;
         }
         
+    }
+
+    private function updateOverdueTasks(){
+        $sql = "UPDATE tasks SET task_status_id = 4 WHERE task_due_date < CURDATE() AND task_status_id IN (1, 2)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
     }
 
     public function getAllTasksByStatus($id): bool | array
